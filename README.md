@@ -4,8 +4,6 @@ React Hook for undo/redo functionality without the hassle.
 
 [**Live Demo**](https://codesandbox.io/s/use-undoable-zi0b4)
 
-![use-undoable animation](./use-undoable.gif)
-
 ## Installation
 
 `yarn add use-undoable`
