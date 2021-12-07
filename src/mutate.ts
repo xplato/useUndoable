@@ -14,7 +14,19 @@ const mutate = (state: State, action: Action) => {
 		return state;
 	}
 
-	const dataMap = {
+	// We need to clone the array here because
+	// calling `future.reverse()` will mutate the
+	// existing array, causing the `mergePast` and
+	// `mergePastReversed` behaviors to work the same
+	// way.
+	const futureClone = [...future];
+
+	const behaviorMap = {
+		mergePastReversed: {
+			past: [...past, ...futureClone.reverse(), present],
+			present: payload,
+			future: []
+		},
 		mergePast: {
 			past: [...past, ...future, present],
 			present: payload,
@@ -32,6 +44,9 @@ const mutate = (state: State, action: Action) => {
 		}
 	}
 
+	console.log({future});
+	
+
 	// We're ignoring this index error here
 	// because the `behavior` key is possibly
 	// undefined within the Action type. Of course,
@@ -44,7 +59,7 @@ const mutate = (state: State, action: Action) => {
 	// specify the behavior.
 	//
 	// @ts-ignore
-	return dataMap[behavior]
+	return behaviorMap[behavior]
 };
 
 export {

@@ -1,17 +1,24 @@
-## Version 2.1.2:
+### MAJOR : Version 3.0.0:
+
+- Added `mergePastReversed` mutation behavior option. This is now the default behavior.
+- Corrected typo in README
+- Added a better explanation of the `setState` function.
+- Added SemVer labels to CHANGELOG
+
+### PATCH : Version 2.1.2:
 
 - Removed GIF demo
 
-## Version 2.1.1:
+### PATCH : Version 2.1.1:
 
 - Added GIF demo
 
-## Version 2.1.0:
+### MINOR : Version 2.1.0:
 
 - Added `options` object to be able to set default mutation behavior for all state calls. More options may be added in the future.
 - Updated example; setup live sandbox.
 
-## Version 2.0.0:
+### MAJOR : Version 2.0.0:
 
 - Added functional updater functionality to the `setState` (AKA the `setCount` in the example) function. This behaves the same way as the functional updater form of `setCount` directly from `useState`. AKA: `setCount(count => count + 1)`
 - Renamed `newPresent` to `payload`

@@ -35,11 +35,7 @@ const reducer = (state: State, action: Action): State => {
 		}
 	}
 
-	const update = () => {
-		// Update the current state and DO NOT
-		// overwrite the current future value.
-		return mutate(state, action);
-	}
+	const update = () => mutate(state, action);
 
 	const reset = () => {
 		const { payload } = action;

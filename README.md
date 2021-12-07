@@ -27,7 +27,7 @@ const MyComponent = () => {
 			undo,
 			redo
 		}
-	] = useUndoable(initialStates);
+	] = useUndoable(initialState);
 
 	return <p>{count}</p>
 }
@@ -91,15 +91,32 @@ setCount(0, 'keepFuture');
 
 will keep the future array.
 
-### `count`
+### `count` (`state`)
 
 This is the `present` state. Think of it like the left side of the `useState` hook: `const [count, setCount] = useState(0)`.
 
-### `setCount`
+### `setCount` (`setState`)
 
 This is the updater function. It's used to modify the current state. Think of it like the right side of the `useState` hook: `const [count, setCount] = useState(0)`
 
-When you call this function to update the state, it pushes the current `present` value to the past and updates it with the provided value.
+It mimics the `useState` behavior in that you can either pass a direct value
+
+```
+setCount(42);
+```
+
+or you can pass a callback function to which the `present` state is passed as a parameter:
+
+```
+setCount(c => c + 1);
+
+// Expanded
+setCount((count) => {
+	return count + 1;
+})
+```
+
+When you call this function to update the state, it pushes the current `present` value to the past and updates it with value you provide.
 
 ### Mutation behavior
 
@@ -115,9 +132,9 @@ The default value is `mergePast`.
 
 The following are the possible values:
 
-#### `mergePast`
+#### `mergePastReversed`
 
-This will merge the `future` into the `past`, keeping all the changes in the state.
+This will merge the `future` (reversed order) into the `past`, keeping all the changes in the state.
 
 Let's say the state looks like this:
 
@@ -143,13 +160,31 @@ If you then call `setCount(c => c + 1)`, the state will finally look like:
 
 ```
 {
-	past: [0, 1, 3, 4, 2],
+	past: [0, 1, 4, 3, 2],
 	present: 3,
 	future: []
 }
 ```
 
-As you can see here, the `future` (`3, 4`) was merged into the `past` (`0, 1`), right before the previous `present` value (`2`)
+As you can see here, the `future` (`3, 4`) was reversed and merged into the `past` (`0, 1`), right before the previous `present` value (`2`).
+
+> **Why do it this way?**
+
+Although the standard behavior of most undo/redo packages we've found default to the `destroyFuture` option, this has a few downsides. Primarily, if you make a state change _after_ undoing something, all of the future states will be lost. With our `mergePast...` option, no state change will ever be removed; everything can be undone.
+
+#### `mergePast`
+
+This is the same behavior as above, where the `future` is pushed into the `past`, but the order **is not reversed.**
+
+As such, the final state would instead look like:
+
+```
+{
+	past: [0, 1, 3, 4, 2],
+	present: 3,
+	future: []
+}
+```
 
 #### `destroyFuture`
 

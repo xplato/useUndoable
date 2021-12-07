@@ -8,7 +8,7 @@ const Button = ({ children, ...props }) => (
 );
 
 const App = () => {
-	const [behavior, setBehavior] = useState('mergePast');
+	const [behavior, setBehavior] = useState('mergePastReversed');
 
 	const [
 		count,
@@ -63,6 +63,7 @@ const App = () => {
 				<div className="j-divider"></div>
 
 				<select onChange={(ev) => setBehavior(ev.target.value)}>
+					<option value='mergePastReversed'>mergePastReversed</option>
 					<option value='mergePast'>mergePast</option>
 					<option value='destroyFuture'>destroyFuture</option>
 					<option value='keepFuture'>keepFuture</option>

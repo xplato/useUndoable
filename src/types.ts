@@ -1,6 +1,10 @@
 type ActionType = 'undo' | 'redo' | 'set' | 'update' | 'reset';
 
-type MutationBehavior = 'mergePast' | 'destroyFuture' | 'keep future';
+type MutationBehavior =
+	'mergePastReversed' |
+	'mergePast' |
+	'destroyFuture' |
+	'keep future';
 
 interface Action {
 	type: ActionType;

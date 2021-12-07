@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const defaultOptions: Options = {
-	behavior: 'mergePast'
+	behavior: 'mergePastReversed'
 }
 
 const useUndoable = (initialPresent: any, options: Options = defaultOptions) => {
