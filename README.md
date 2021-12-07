@@ -4,6 +4,8 @@ React Hook for undo/redo functionality without the hassle.
 
 [**Live Demo**](https://codesandbox.io/s/use-undoable-zi0b4)
 
+![use-undoable animation](./use-undoable.gif)
+
 ## Installation
 
 `yarn add use-undoable`
@@ -256,7 +258,7 @@ And, of course, you can set `count, setCount` to anything you want by default, s
 
 1. Clone repo and install dependencies for the main project with: `yarn install`
 2. Navigate into the example and do the same.
-3. In the root directory, run `yarn watch`
+3. In the root directory, run `yarn start`
 4. In the example directory, run `yarn start`
 
 ## License
