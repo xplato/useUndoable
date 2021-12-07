@@ -46,7 +46,6 @@ const [
 		canUndo,
 		redo,
 		canRedo,
-		set,
 		reset
 	}
 ] = useUndoable(0);
@@ -200,14 +199,13 @@ const [
 		canUndo: canUndoWithCustomName,
 		redo: redoWithCustomName,
 		canRedo: canRedoWithCustomName,
-		set: updateTheValueAndRemoveTheExistingFuture,
 		reset: deleteEverythingYo
 	}
 ] = useUndoable([{
 	count: 1
 }]);
 
-updateTheValueAndRemoveTheExistingFuture({
+deleteEverythingYo({
 	state: 'My new state'
 });
 ```
