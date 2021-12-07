@@ -2,6 +2,8 @@
 
 React Hook for undo/redo functionality without the hassle.
 
+[**Live Demo**](https://codesandbox.io/s/use-undoable-zi0b4)
+
 ## Installation
 
 `yarn add use-undoable`
@@ -13,6 +15,8 @@ or
 ## Usage
 
 ```
+import useUndoable from 'use-undoable';
+
 const MyComponent = () => {
 	const initialState = 0;
 
@@ -23,11 +27,21 @@ const MyComponent = () => {
 			undo,
 			redo
 		}
-	] = useUndoable(initialState);
+	] = useUndoable(initialStates);
 
 	return <p>{count}</p>
 }
 ```
+
+## Features
+
+(and how `useuUndoable` improves on existing packages)
+
+- Familiar API similar to `useState`
+- You can choose how you'd like state changes to be reflected, with `mergePast`, `destroyFuture`, or `keepFuture`
+- Ability to set default options so that each call to `setState` doesn't need to pass the same mutation behavior.
+- Zero dependencies
+- Tiny; less than 35 kB unpacked
 
 ### Docs
 
@@ -48,8 +62,34 @@ const [
 		canRedo,
 		reset
 	}
-] = useUndoable(0);
+] = useUndoable(initialState, options);
 ```
+
+### `options`
+
+If you want to set a specific mutation behavior for all state changes, you can declare the options object like so:
+
+```
+const options = {
+	behavior: 'destroyFuture'
+}
+```
+
+This way, all calls to `setCount` will destroy the future array on new state changes. You **can** override this behavior with each call individually, if you'd like.
+
+Therefore:
+
+```
+setCount(0);
+```
+
+will use the `destroyFuture` behavior and
+
+```
+setCount(0, 'keepFuture');
+```
+
+will keep the future array.
 
 ### `count`
 

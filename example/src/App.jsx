@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useUndoable from 'use-undoable';
 
 const Button = ({ children, ...props }) => (
@@ -8,6 +8,8 @@ const Button = ({ children, ...props }) => (
 );
 
 const App = () => {
+	const [behavior, setBehavior] = useState('mergePast');
+
 	const [
 		count,
 		setCount,
@@ -19,10 +21,11 @@ const App = () => {
 			canUndo,
 			redo,
 			canRedo,
-			set,
 			reset
 		}
-	] = useUndoable(0);
+	] = useUndoable(0, {
+		behavior
+	});
 
 	const getVisualItem = (items) => {
 		if (items.length === 0) {
@@ -56,6 +59,14 @@ const App = () => {
 				<div className="mt-1r">
 					<Button onClick={() => reset()}>reset</Button>
 				</div>
+
+				<div className="j-divider"></div>
+
+				<select onChange={(ev) => setBehavior(ev.target.value)}>
+					<option value='mergePast'>mergePast</option>
+					<option value='destroyFuture'>destroyFuture</option>
+					<option value='keepFuture'>keepFuture</option>
+				</select>
 			</div>
 		</section>
 	);

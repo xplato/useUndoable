@@ -1,7 +1,7 @@
 import { useReducer, useCallback } from 'react';
 
 import { reducer } from './reducer';
-import { MutationBehavior } from './types';
+import { MutationBehavior, Options } from './types';
 
 const initialState = {
 	past: [],
@@ -9,7 +9,11 @@ const initialState = {
 	future: [],
 };
 
-const useUndoable = (initialPresent: any) => {
+const defaultOptions: Options = {
+	behavior: 'mergePast'
+}
+
+const useUndoable = (initialPresent: any, options: Options = defaultOptions) => {
 	const [state, dispatch] = useReducer(reducer, {
 		...initialState,
 		present: initialPresent
@@ -34,7 +38,7 @@ const useUndoable = (initialPresent: any) => {
 	const update = useCallback((payload, mutationBehavior: MutationBehavior) =>
 		dispatch({ type: 'update', payload, behavior: mutationBehavior }), []);
 
-	const setState = (payload: any, mutationBehavior: MutationBehavior = 'mergePast') => {
+	const setState = (payload: any, mutationBehavior: MutationBehavior = options.behavior) => {
 		return typeof payload === 'function' ? (
 			update(payload(state.present), mutationBehavior)
 		) : (

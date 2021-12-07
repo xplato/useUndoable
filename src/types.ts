@@ -14,9 +14,14 @@ interface State {
 	future: any[];
 }
 
+interface Options {
+	behavior: MutationBehavior
+}
+
 export type {
 	ActionType,
 	MutationBehavior,
 	Action,
-	State
+	State,
+	Options
 }
