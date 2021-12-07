@@ -44,8 +44,8 @@ const App = () => {
 				<div className="j-divider"></div>
 
 				<div className="flex flex-row align-c mb-1r">
-					<Button onClick={() => setCount(count + 1)}>+</Button>
-					<Button onClick={() => setCount(count - 1)}>-</Button>
+					<Button onClick={() => setCount(c => c + 1)}>+</Button>
+					<Button onClick={() => setCount(c => c - 1)}>-</Button>
 				</div>
 
 				<div>

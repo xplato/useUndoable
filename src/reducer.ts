@@ -1,4 +1,4 @@
-import { mutate } from './utils';
+import { mutate } from './mutate';
 
 import type { Action, State } from './types';
 
@@ -35,24 +35,18 @@ const reducer = (state: State, action: Action): State => {
 		}
 	}
 
-	const set = () => {
-		// Update the current state and OVERWRITE
-		// the current future value.
-		return mutate(state, action, false);
-	}
-
 	const update = () => {
 		// Update the current state and DO NOT
 		// overwrite the current future value.
-		return mutate(state, action, true);
+		return mutate(state, action);
 	}
 
 	const reset = () => {
-		const { newPresent } = action;
+		const { payload } = action;
 
 		return {
 			past: [],
-			present: newPresent,
+			present: payload,
 			future: []
 		};
 	}
@@ -60,7 +54,6 @@ const reducer = (state: State, action: Action): State => {
 	const actions = {
 		undo,
 		redo,
-		set,
 		update,
 		reset
 	}
