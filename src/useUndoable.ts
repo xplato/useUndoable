@@ -37,6 +37,8 @@ const useUndoable = (initialPresent: any, options: Options = defaultOptions) => 
 	}, [canRedo]);
 
 	const reset = useCallback((payload = initialPresent) => dispatch({ type: 'reset', payload }), []);
+	const resetInitialState = useCallback(payload => dispatch({ type: 'resetInitialState', payload }), []);
+
 	const update = useCallback((payload, mutationBehavior: MutationBehavior) =>
 		dispatch({
 			type: 'update', 
@@ -64,11 +66,13 @@ const useUndoable = (initialPresent: any, options: Options = defaultOptions) => 
 			past: state.past,
 			future: state.future,
 
-			reset,
 			undo,
 			canUndo,
 			redo,
-			canRedo
+			canRedo,
+
+			reset,
+			resetInitialState
 		}
 	];
 }

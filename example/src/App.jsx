@@ -21,7 +21,8 @@ const App = () => {
 			canUndo,
 			redo,
 			canRedo,
-			reset
+			reset,
+			resetInitialState
 		}
 	] = useUndoable(0, {
 		behavior
@@ -70,6 +71,8 @@ const App = () => {
 				</select>
 
 				<p className="mt-1r">historyLimit: 100</p>
+
+				<Button onClick={() => resetInitialState(42)}>resetInitialState to 42</Button>
 			</div>
 		</section>
 	);

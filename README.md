@@ -14,22 +14,22 @@ or
 
 ## Usage
 
-```
+```js
 import useUndoable from 'use-undoable';
 
 const MyComponent = () => {
-    const initialState = 0;
+	const initialState = 0;
 
-    const [
-        count,
-        setCount,
-        {
-            undo,
-            redo
-        }
-    ] = useUndoable(initialState);
+	const [
+		count,
+		setCount,
+		{
+			undo,
+			redo
+		}
+	] = useUndoable(initialState);
 
-    return <p>{count}</p>
+	return <p>{count}</p>
 }
 ```
 
@@ -46,23 +46,25 @@ const MyComponent = () => {
 
 ### Docs
 
-This section explains the values given by the `useUndoable` hook. Let's assume that we've called the hook and set **all** of the exported values:
+This section explains the values given by the `useUndoable` hook. **Make sure to read until the end of the README,** just in case there's an option or function that will suit your use-case.
 
-```
+Let's assume that we've called the hook and set **all** of the exported values:
+
+```js
 const [
-    count,
-    setCount,
+	count,
+	setCount,
 
-    {
-        past,
-        future,
+	{
+		past,
+		future,
 
-        undo,
-        canUndo,
-        redo,
-        canRedo,
-        reset
-    }
+		undo,
+		canUndo,
+		redo,
+		canRedo,
+		reset
+	}
 ] = useUndoable(initialState, options);
 ```
 
@@ -70,29 +72,31 @@ const [
 
 Here's an object showing all the option values in TypeScript format:
 
-```
+```js
 const options = {
-    behavior: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keep future',
-    historyLimit: number | 'infinium' | 'infinity'
+	behavior: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keep future',
+	historyLimit: number | 'infinium' | 'infinity'
 }
 ```
 
 Note: `options` is not required. It will default to the following if you don't specify it:
 
-```
+```js
 {
-    behavior: 'mergePastReversed',
-    historyLimit: 100
+	behavior: 'mergePastReversed',
+	historyLimit: 100
 }
 ```
 
 #### `behavior`
 
+Allowed values: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keep future'
+
 Declaring the mutation behavior in the `options` sets that behavior for all state changes. This behavior can be overridden within individual state mutations.
 
-```
+```js
 const options = {
-    behavior: 'destroyFuture'
+	behavior: 'destroyFuture'
 }
 ```
 
@@ -100,19 +104,23 @@ With `destroyFuture`, all calls to `setCount` will destroy the future array on n
 
 Therefore:
 
-```
+```js
 setCount(0);
 ```
 
 will use the `destroyFuture` behavior and
 
-```
+```js
 setCount(0, 'keepFuture');
 ```
 
 will keep the future array.
 
 #### `historyLimit`
+
+Allowed values: number (> 0) | 'infinium' | 'infinity'
+
+(Note: the `infinium` option is the same as `infinity`. It's just a nod to the name of our company.)
 
 Defines the max size for the history. The default is `100.` The resulting `past` array will be +1 whatever number you give. That is, if you set the `historyLimit` to 5, there will actually be 6 total items within the array because the `present` is merged into it on every state change.
 
@@ -130,18 +138,18 @@ This is the updater function. It's used to modify the current state. Think of it
 
 It mimics the `useState` behavior in that you can either pass a direct value
 
-```
+```js
 setCount(42);
 ```
 
 or you can pass a callback function to which the `present` state is passed as a parameter:
 
-```
+```js
 setCount(c => c + 1);
 
 // Expanded
 setCount((count) => {
-    return count + 1;
+	return count + 1;
 })
 ```
 
@@ -155,7 +163,7 @@ Version 2.0.0 added the `mutationBehavior` argument to this function. It allows 
 
 For example:
 
-```
+```js
 setCount(c => c + 1, 'mergePast')
 ```
 
@@ -169,31 +177,31 @@ This will merge the `future` (reversed order) into the `past`, keeping all the c
 
 Let's say the state looks like this:
 
-```
+```js
 {
-    past: [0, 1, 2, 3],
-    present: 4,
-    future: []
+	past: [0, 1, 2, 3],
+	present: 4,
+	future: []
 }
 ```
 
 If you call `undo` twice, the state will look like:
 
-```
+```js
 {
-    past: [0, 1],
-    present: 2,
-    future: [3, 4]
+	past: [0, 1],
+	present: 2,
+	future: [3, 4]
 }
 ```
 
 If you then call `setCount(c => c + 1)`, the state will finally look like:
 
-```
+```js
 {
-    past: [0, 1, 4, 3, 2],
-    present: 3,
-    future: []
+	past: [0, 1, 4, 3, 2],
+	present: 3,
+	future: []
 }
 ```
 
@@ -209,11 +217,11 @@ This is the same behavior as above, where the `future` is pushed into the `past`
 
 As such, the final state would instead look like:
 
-```
+```js
 {
-    past: [0, 1, 3, 4, 2],
-    present: 3,
-    future: []
+	past: [0, 1, 3, 4, 2],
+	present: 3,
+	future: []
 }
 ```
 
@@ -223,31 +231,31 @@ This is the standard behavior of many undo/redo packages you'll come across. Whe
 
 Consider the following:
 
-```
+```js
 {
-    past: [0, 1, 2, 3],
-    present: 4,
-    future: []
+	past: [0, 1, 2, 3],
+	present: 4,
+	future: []
 }
 ```
 
 If you call `undo` twice, the state will look like:
 
-```
+```js
 {
-    past: [0, 1],
-    present: 2,
-    future: [3, 4]
+	past: [0, 1],
+	present: 2,
+	future: [3, 4]
 }
 ```
 
 If you then call `setCount(c => c + 1)`, the state will finally look like:
 
-```
+```js
 {
-    past: [0, 1, 2],
-    present: 3,
-    future: []
+	past: [0, 1, 2],
+	present: 3,
+	future: []
 }
 ```
 
@@ -257,11 +265,11 @@ This is similar to the above, but instead of deleting the future, it'll keep it.
 
 Assume we've started with the same default state, pressed undo twice like above, the final state will be:
 
-```
+```js
 {
-    past: [0, 1, 2],
-    present: 3,
-    future: [3, 4]
+	past: [0, 1, 2],
+	present: 3,
+	future: [3, 4]
 }
 ```
 
@@ -279,14 +287,74 @@ This is a function that accepts **zero** parameters that pulls from the `future`
 
 ### `canUndo`, `canRedo`
 
-A boolean that indicates whether or not you can undo the latest action.
+A boolean that indicates whether or not you can undo/redo the latest action.
 
 ### `reset`
 
 This function empties both the `past` and `future` arrays and sets the `present` state with the value you provide. If you do not provide a value, it defaults to the `initialState` you originally called the `useUndoable` hook with.
 
-```
+```js
 reset(42);
+```
+
+### `resetInitialState` (handling `async`)
+
+If you're dynamically updating the state from an async function, your `initialState` may begin as an empty or `undefined` object. `resetInitialState` will allow you to prevent the `undo` function from going back to that `undefined` object.
+
+Imagine you're pulling an array of todo items from your API. Initially, you set the `initialState` as an empty array (`[]`). If users can drag items around to change the order and then undo their change, they would, previously, be able to undo all the way back to that empty array.
+
+`resetInitialState` allows you to replace the first item (index `0`) of the `past` array to anything you want, potentially preventing your users from undoing to nothingness. Consider the following code:
+
+```js
+const MyComponent = () => {
+	const [
+		todos,
+		setTodos,
+		{
+			undo,
+			redo
+		}
+	] = useUndoable([]);
+
+	useEffect(() => {
+		// query your API and set the todos
+		setTodos(api.queryForTodos());
+	}, []);
+
+	return (
+		// ...
+	);
+};
+```
+
+With this setup, your users can undo back to that empty array defined here: `useUndoable([])`
+
+Let's fix this so that the user can only undo back to the array sent from the API:
+
+```js
+const MyComponent = () => {
+	const [
+		todos,
+		setTodos,
+		{
+			undo,
+			redo,
+			resetInitialState
+		}
+	] = useUndoable([]);
+
+	useEffect(() => {
+		// query your API and set the todos
+		const apiTodos = api.queryForTodos();
+
+		setTodos(apiTodos);
+		resetInitialState(apiTodos);
+	}, []);
+
+	return (
+		// ...
+	);
+};
 ```
 
 ## Performance considerations
@@ -309,26 +377,26 @@ If you spot an area where performance can be improved within our source code, pl
 
 Since the third value returned from the `useUndoable` hook is an object, you can change the names of the values like so:
 
-```
+```js
 const [
-    count,
-    setCount,
-    {
-        past: currentPast,
-        future: currentFuture,
+	count,
+	setCount,
+	{
+		past: currentPast,
+		future: currentFuture,
 
-        undo: undoWithCustomName,
-        canUndo: canUndoWithCustomName,
-        redo: redoWithCustomName,
-        canRedo: canRedoWithCustomName,
-        reset: deleteEverythingYo
-    }
+		undo: undoWithCustomName,
+		canUndo: canUndoWithCustomName,
+		redo: redoWithCustomName,
+		canRedo: canRedoWithCustomName,
+		reset: deleteEverythingYo
+	}
 ] = useUndoable([{
-    count: 1
+	count: 1
 }]);
 
 deleteEverythingYo({
-    state: 'My new state'
+	state: 'My new state'
 });
 ```
 

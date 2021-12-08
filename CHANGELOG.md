@@ -1,3 +1,9 @@
+### MINOR : Version 3.2.0:
+
+- Improved error handling.
+- Added `resetInitialState` function. See README.
+- Improvements to README; syntax highlighting.
+
 ### MINOR : Version 3.1.0:
 
 - Introduced `historyLimit` option to help prevent huge memory consumption. The default limit is 100.

@@ -1,4 +1,4 @@
-type ActionType = 'undo' | 'redo' | 'set' | 'update' | 'reset';
+type ActionType = 'undo' | 'redo' | 'update' | 'reset' | 'resetInitialState';
 type HistoryLimit = number | 'infinium' | 'infinity';
 
 type MutationBehavior =
@@ -26,7 +26,6 @@ interface Options {
 }
 
 export type {
-	ActionType,
 	HistoryLimit,
 	MutationBehavior,
 	Action,

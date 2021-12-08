@@ -1,4 +1,5 @@
 import { mutate } from './mutate';
+import { payloadError } from './errors';
 
 import type { Action, State } from './types';
 
@@ -45,13 +46,32 @@ const reducer = (state: State, action: Action): State => {
 			present: payload,
 			future: []
 		};
+	};
+
+	const resetInitialState = () => {
+		const { payload } = action;
+
+		if (!payload) {
+			payloadError('resetInitialState');
+		}
+
+		// Duplicate the past for mutation
+		let mPast = [...past];
+		mPast[0] = payload;
+
+		return {
+			past: [...mPast],
+			present,
+			future: [...future]
+		};
 	}
 
 	const actions = {
 		undo,
 		redo,
 		update,
-		reset
+		reset,
+		resetInitialState
 	}
 
 	return actions[action.type]();

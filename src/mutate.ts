@@ -1,3 +1,5 @@
+import { payloadError } from './errors';
+
 import type { Action, State } from './types';
 
 const ensureLimit = (limit: number | undefined, arr: any[]) => {
@@ -21,6 +23,10 @@ const ensureLimit = (limit: number | undefined, arr: any[]) => {
 const mutate = (state: State, action: Action) => {
 	const { past, present, future } = state;
 	const { payload, behavior, historyLimit } = action;
+
+	if (!payload) {
+		payloadError('mutate');
+	}
 
 	let mPast = [...past];
 
