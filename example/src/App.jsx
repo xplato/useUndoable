@@ -68,6 +68,8 @@ const App = () => {
 					<option value='destroyFuture'>destroyFuture</option>
 					<option value='keepFuture'>keepFuture</option>
 				</select>
+
+				<p className="mt-1r">historyLimit: 100</p>
 			</div>
 		</section>
 	);

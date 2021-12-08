@@ -1,3 +1,8 @@
+### MINOR : Version 3.1.0:
+
+- Introduced `historyLimit` option to help prevent huge memory consumption. The default limit is 100.
+- Corrected README; updated indentation to spaces for consistency.
+
 ### MAJOR : Version 3.0.0:
 
 - Added `mergePastReversed` mutation behavior option. This is now the default behavior.

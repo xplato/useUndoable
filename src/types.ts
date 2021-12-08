@@ -1,4 +1,5 @@
 type ActionType = 'undo' | 'redo' | 'set' | 'update' | 'reset';
+type HistoryLimit = number | 'infinium' | 'infinity';
 
 type MutationBehavior =
 	'mergePastReversed' |
@@ -9,7 +10,8 @@ type MutationBehavior =
 interface Action {
 	type: ActionType;
 	payload?: any;
-	behavior?: MutationBehavior
+	behavior?: MutationBehavior;
+	historyLimit?: HistoryLimit;
 }
 
 interface State {
@@ -19,11 +21,13 @@ interface State {
 }
 
 interface Options {
-	behavior: MutationBehavior
+	behavior?: MutationBehavior,
+	historyLimit?: HistoryLimit;
 }
 
 export type {
 	ActionType,
+	HistoryLimit,
 	MutationBehavior,
 	Action,
 	State,

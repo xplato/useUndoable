@@ -1,9 +1,35 @@
 import type { Action, State } from './types';
 
+const ensureLimit = (limit: number | undefined, arr: any[]) => {
+	if (!limit) return arr;
+
+	let n = [...arr];
+
+	if (n.length <= limit) return arr;
+
+	const exceedsBy = n.length - limit;
+
+	if (exceedsBy === 1) {
+		n.shift();
+	} else {
+		n.splice(0, exceedsBy);
+	}
+
+	return n;
+}
+
 const mutate = (state: State, action: Action) => {
 	const { past, present, future } = state;
+	const { payload, behavior, historyLimit } = action;
 
-	const { payload, behavior } = action;
+	let mPast = [...past];
+
+	if (
+		historyLimit !== 'infinium' &&
+		historyLimit !== 'infinity'
+	) {
+		mPast = ensureLimit(historyLimit, past);
+	}
 
 	if (JSON.stringify(payload) === JSON.stringify(present)) {
 		// TODO:
@@ -23,29 +49,26 @@ const mutate = (state: State, action: Action) => {
 
 	const behaviorMap = {
 		mergePastReversed: {
-			past: [...past, ...futureClone.reverse(), present],
+			past: [...mPast, ...futureClone.reverse(), present],
 			present: payload,
 			future: []
 		},
 		mergePast: {
-			past: [...past, ...future, present],
+			past: [...mPast, ...future, present],
 			present: payload,
 			future: []
 		},
 		destroyFuture: {
-			past: [...past, present],
+			past: [...mPast, present],
 			present: payload,
 			future: []
 		},
 		keepFuture: {
-			past: [...past, present],
+			past: [...mPast, present],
 			present: payload,
 			future,
 		}
-	}
-
-	console.log({future});
-	
+	}	
 
 	// We're ignoring this index error here
 	// because the `behavior` key is possibly

@@ -1,7 +1,8 @@
 import { useReducer, useCallback } from 'react';
 
 import { reducer } from './reducer';
-import { MutationBehavior, Options } from './types';
+
+import type { MutationBehavior, Options } from './types';
 
 const initialState = {
 	past: [],
@@ -10,7 +11,8 @@ const initialState = {
 };
 
 const defaultOptions: Options = {
-	behavior: 'mergePastReversed'
+	behavior: 'mergePastReversed',
+	historyLimit: 100
 }
 
 const useUndoable = (initialPresent: any, options: Options = defaultOptions) => {
@@ -36,8 +38,17 @@ const useUndoable = (initialPresent: any, options: Options = defaultOptions) => 
 
 	const reset = useCallback((payload = initialPresent) => dispatch({ type: 'reset', payload }), []);
 	const update = useCallback((payload, mutationBehavior: MutationBehavior) =>
-		dispatch({ type: 'update', payload, behavior: mutationBehavior }), []);
+		dispatch({
+			type: 'update', 
+			payload, 
+			behavior: mutationBehavior,
+			historyLimit: options.historyLimit || defaultOptions.historyLimit
+		}), []);
 
+
+	// We can ignore the undefined type error here because
+	// we are setting a default value to options.
+	// @ts-ignore
 	const setState = (payload: any, mutationBehavior: MutationBehavior = options.behavior) => {
 		return typeof payload === 'function' ? (
 			update(payload(state.present), mutationBehavior)
