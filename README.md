@@ -18,18 +18,18 @@ or
 import useUndoable from 'use-undoable';
 
 const MyComponent = () => {
-	const initialState = 0;
+    const initialState = 0;
 
-	const [
-		count,
-		setCount,
-		{
-			undo,
-			redo
-		}
-	] = useUndoable(initialState);
+    const [
+        count,
+        setCount,
+        {
+            undo,
+            redo
+        }
+    ] = useUndoable(initialState);
 
-	return <p>{count}</p>
+    return <p>{count}</p>
 }
 ```
 
@@ -52,19 +52,19 @@ Let's assume that we've called the hook and set **all** of the exported values:
 
 ```js
 const [
-	count,
-	setCount,
+    count,
+    setCount,
 
-	{
-		past,
-		future,
+    {
+        past,
+        future,
 
-		undo,
-		canUndo,
-		redo,
-		canRedo,
-		reset
-	}
+        undo,
+        canUndo,
+        redo,
+        canRedo,
+        reset
+    }
 ] = useUndoable(initialState, options);
 ```
 
@@ -74,8 +74,8 @@ Here's an object showing all the option values in TypeScript format:
 
 ```js
 const options = {
-	behavior: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keep future',
-	historyLimit: number | 'infinium' | 'infinity'
+    behavior: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keep future',
+    historyLimit: number | 'infinium' | 'infinity'
 }
 ```
 
@@ -83,8 +83,8 @@ Note: `options` is not required. It will default to the following if you don't s
 
 ```js
 {
-	behavior: 'mergePastReversed',
-	historyLimit: 100
+    behavior: 'mergePastReversed',
+    historyLimit: 100
 }
 ```
 
@@ -96,7 +96,7 @@ Declaring the mutation behavior in the `options` sets that behavior for all stat
 
 ```js
 const options = {
-	behavior: 'destroyFuture'
+    behavior: 'destroyFuture'
 }
 ```
 
@@ -149,7 +149,7 @@ setCount(c => c + 1);
 
 // Expanded
 setCount((count) => {
-	return count + 1;
+    return count + 1;
 })
 ```
 
@@ -179,9 +179,9 @@ Let's say the state looks like this:
 
 ```js
 {
-	past: [0, 1, 2, 3],
-	present: 4,
-	future: []
+    past: [0, 1, 2, 3],
+    present: 4,
+    future: []
 }
 ```
 
@@ -189,9 +189,9 @@ If you call `undo` twice, the state will look like:
 
 ```js
 {
-	past: [0, 1],
-	present: 2,
-	future: [3, 4]
+    past: [0, 1],
+    present: 2,
+    future: [3, 4]
 }
 ```
 
@@ -199,9 +199,9 @@ If you then call `setCount(c => c + 1)`, the state will finally look like:
 
 ```js
 {
-	past: [0, 1, 4, 3, 2],
-	present: 3,
-	future: []
+    past: [0, 1, 4, 3, 2],
+    present: 3,
+    future: []
 }
 ```
 
@@ -219,9 +219,9 @@ As such, the final state would instead look like:
 
 ```js
 {
-	past: [0, 1, 3, 4, 2],
-	present: 3,
-	future: []
+    past: [0, 1, 3, 4, 2],
+    present: 3,
+    future: []
 }
 ```
 
@@ -233,9 +233,9 @@ Consider the following:
 
 ```js
 {
-	past: [0, 1, 2, 3],
-	present: 4,
-	future: []
+    past: [0, 1, 2, 3],
+    present: 4,
+    future: []
 }
 ```
 
@@ -243,9 +243,9 @@ If you call `undo` twice, the state will look like:
 
 ```js
 {
-	past: [0, 1],
-	present: 2,
-	future: [3, 4]
+    past: [0, 1],
+    present: 2,
+    future: [3, 4]
 }
 ```
 
@@ -253,9 +253,9 @@ If you then call `setCount(c => c + 1)`, the state will finally look like:
 
 ```js
 {
-	past: [0, 1, 2],
-	present: 3,
-	future: []
+    past: [0, 1, 2],
+    present: 3,
+    future: []
 }
 ```
 
@@ -267,9 +267,9 @@ Assume we've started with the same default state, pressed undo twice like above,
 
 ```js
 {
-	past: [0, 1, 2],
-	present: 3,
-	future: [3, 4]
+    past: [0, 1, 2],
+    present: 3,
+    future: [3, 4]
 }
 ```
 
@@ -307,23 +307,23 @@ Imagine you're pulling an array of todo items from your API. Initially, you set 
 
 ```js
 const MyComponent = () => {
-	const [
-		todos,
-		setTodos,
-		{
-			undo,
-			redo
-		}
-	] = useUndoable([]);
+    const [
+        todos,
+        setTodos,
+        {
+            undo,
+            redo
+        }
+    ] = useUndoable([]);
 
-	useEffect(() => {
-		// query your API and set the todos
-		setTodos(api.queryForTodos());
-	}, []);
+    useEffect(() => {
+        // query your API and set the todos
+        setTodos(api.queryForTodos());
+    }, []);
 
-	return (
-		// ...
-	);
+    return (
+        // ...
+    );
 };
 ```
 
@@ -333,27 +333,27 @@ Let's fix this so that the user can only undo back to the array sent from the AP
 
 ```js
 const MyComponent = () => {
-	const [
-		todos,
-		setTodos,
-		{
-			undo,
-			redo,
-			resetInitialState
-		}
-	] = useUndoable([]);
+    const [
+        todos,
+        setTodos,
+        {
+            undo,
+            redo,
+            resetInitialState
+        }
+    ] = useUndoable([]);
 
-	useEffect(() => {
-		// query your API and set the todos
-		const apiTodos = api.queryForTodos();
+    useEffect(() => {
+        // query your API and set the todos
+        const apiTodos = api.queryForTodos();
 
-		setTodos(apiTodos);
-		resetInitialState(apiTodos);
-	}, []);
+        setTodos(apiTodos);
+        resetInitialState(apiTodos);
+    }, []);
 
-	return (
-		// ...
-	);
+    return (
+        // ...
+    );
 };
 ```
 
@@ -379,24 +379,24 @@ Since the third value returned from the `useUndoable` hook is an object, you can
 
 ```js
 const [
-	count,
-	setCount,
-	{
-		past: currentPast,
-		future: currentFuture,
+    count,
+    setCount,
+    {
+        past: currentPast,
+        future: currentFuture,
 
-		undo: undoWithCustomName,
-		canUndo: canUndoWithCustomName,
-		redo: redoWithCustomName,
-		canRedo: canRedoWithCustomName,
-		reset: deleteEverythingYo
-	}
+        undo: undoWithCustomName,
+        canUndo: canUndoWithCustomName,
+        redo: redoWithCustomName,
+        canRedo: canRedoWithCustomName,
+        reset: deleteEverythingYo
+    }
 ] = useUndoable([{
-	count: 1
+    count: 1
 }]);
 
 deleteEverythingYo({
-	state: 'My new state'
+    state: 'My new state'
 });
 ```
 
