@@ -3,6 +3,13 @@ import { payloadError } from './errors';
 import type { Action, State } from './types';
 
 const ensureLimit = (limit: number | undefined, arr: any[]) => {
+	// Ensures that the `past` array doesn't exceed
+	// the specified `limit` amount. This is referred
+	// to as the `historyLimit` within the public API.
+
+	// The conditional check in the `mutate` function
+	// might pass a potentially `undefined` value,
+	// therefore we check if it's valid here.
 	if (!limit) return arr;
 
 	let n = [...arr];
@@ -12,8 +19,12 @@ const ensureLimit = (limit: number | undefined, arr: any[]) => {
 	const exceedsBy = n.length - limit;
 
 	if (exceedsBy === 1) {
+		// This isn't faster than splice, but it works;
+		// therefore, we're leaving it.
+		// https://www.measurethat.net/Benchmarks/Show/3454/0/slice-vs-splice-vs-shift-who-is-the-fastest-to-keep-con
 		n.shift();
 	} else {
+		// This shouldn't ever happen, I think.
 		n.splice(0, exceedsBy);
 	}
 
@@ -25,6 +36,14 @@ const mutate = (state: State, action: Action) => {
 	const { payload, behavior, historyLimit } = action;
 
 	if (!payload) {
+		// A mutation call requires a payload.
+		// I guess we _could_ simply set the state
+		// to `undefined` with an empty payload,
+		// but this would probably be considered
+		// unexpected behavior.
+		//
+		// If you want to set the state to `undefined`,
+		// pass that explicitly.
 		payloadError('mutate');
 	}
 
@@ -67,12 +86,12 @@ const mutate = (state: State, action: Action) => {
 		}
 	}	
 
-	// We're ignoring this index error here
-	// because the `behavior` key is possibly
-	// undefined within the Action type. Of course,
-	// since the `setState` function in the `useUndoable.ts`
-	// file sets a default value for this parameter, we know
-	// it'll always be defined.
+	// TypeScript tells us that the `behavior` key is possibly
+	// `undefined` because of the optional value specified in
+	// the Action type. Of course, since the `setState` function
+	// in the `useUndoable.ts` file sets a default value for this
+	// parameter, we know it'll always be defined on calls to
+	// `mutate`. Therefore, we can ignore this.
 	//
 	// It was left potentially undefined within the Action
 	// type so that all calls to `dispatch` don't need to

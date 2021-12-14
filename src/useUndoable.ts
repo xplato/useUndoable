@@ -50,6 +50,7 @@ const useUndoable = (initialPresent: any, options: Options = defaultOptions) => 
 
 	// We can ignore the undefined type error here because
 	// we are setting a default value to options.
+	//
 	// @ts-ignore
 	const setState = (payload: any, mutationBehavior: MutationBehavior = options.behavior) => {
 		return typeof payload === 'function' ? (
