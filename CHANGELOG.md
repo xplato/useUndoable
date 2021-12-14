@@ -1,3 +1,7 @@
+### PATCH : Version 3.2.1:
+
+- Fixed an issue where repeated state mutations weren't properly informing components of updates. This was caused by the comparison check on lines 40-47 in `mutate.ts`.
+
 ### MINOR : Version 3.2.0:
 
 - Improved error handling.

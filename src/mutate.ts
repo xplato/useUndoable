@@ -37,15 +37,6 @@ const mutate = (state: State, action: Action) => {
 		mPast = ensureLimit(historyLimit, past);
 	}
 
-	if (JSON.stringify(payload) === JSON.stringify(present)) {
-		// TODO:
-		// Could this potentially cause component update issues
-		// since we're returning the same state object? Would
-		// some projects expect every call to mutate() to return
-		// a new object, even if it has the same data?
-		return state;
-	}
-
 	// We need to clone the array here because
 	// calling `future.reverse()` will mutate the
 	// existing array, causing the `mergePast` and
