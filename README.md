@@ -128,6 +128,45 @@ Therefore, if your project absolutely requires there to be only 1,000 **total** 
 
 **Note:** It is highly recommended that you set a limit specific to your project. If your state contains an array of objects, for instance, the history could quickly get out of hand. If you make a state change too often, your project could start consuming **a lot** of memory. That is why the default is `100`.
 
+#### `ignoreIdenticalMutations` & `cloneState`
+
+Most of the time, you'll probably want `useUndoable` to ignore multiple mutations with the same payload value. There are very rare—though existing—cases where you actually need multiple identical mutations. This option helps you handle those rare cases.
+
+By default, this is set to `true`.
+
+Consider:
+
+```
+const onChange = (count) => {
+	const c = count + 1;
+
+	setCount(c);
+	setCount(c);
+}
+```
+
+By default, this will only set the `count` once, and the other mutation is ignored. If you set it to `false`, however, this _would_ work and you'd see a state like this:
+
+```
+{
+	past: [..., 3, 4, 5],
+	present: 5,
+	future: []
+}
+```
+
+Notice the two `5`s.
+
+If you make use of the `ignoreIdenticalMutations` option, you also have access to the `cloneState` option.
+
+Note: If you don't need to change the `ignoreIdenticalMutations`, **`cloneState` won't make any difference for you.**
+
+##### `cloneState`
+
+This is a boolean indicating whether or not to clone the returned `state` object after an identical mutation. This can help with, for example, some deeper React render issues. It just depends on your project.
+
+It defaults to `false`.
+
 ### `count` (`state`)
 
 This is the `present` state. Think of it like the left side of the `useState` hook: `const [count, setCount] = useState(0)`.
@@ -356,6 +395,8 @@ const MyComponent = () => {
     );
 };
 ```
+
+Note: it is important that this function is only called once. If you call it multiple times with an existing state, you run the risk of accidentally deleteing _legitimate_ state values and replacing it with some generic (or "starting") one.
 
 ## Performance considerations
 

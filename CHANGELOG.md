@@ -1,3 +1,8 @@
+### MINOR : Version 3.3.1:
+
+- Added `ignoreIdenticalMutations` option. This allows you to prevent identical `setState` calls from being pushed into the `past`. See the README for more information.
+- Added companion `cloneState` option.
+
 ### PATCH : Version 3.2.1:
 
 - Fixed an issue where repeated state mutations weren't properly informing components of updates. This was caused by the comparison check on lines 40-47 in `mutate.ts`.

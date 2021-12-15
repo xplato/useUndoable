@@ -12,8 +12,15 @@ const initialState = {
 
 const defaultOptions: Options = {
 	behavior: 'mergePastReversed',
-	historyLimit: 100
+	historyLimit: 100,
+	ignoreIdenticalMutations: true,
+	cloneState: false,
 }
+
+const compileMutateOptions = (options: Options) => ({
+	...defaultOptions,
+	...options
+});
 
 const useUndoable = (initialPresent: any, options: Options = defaultOptions) => {
 	const [state, dispatch] = useReducer(reducer, {
@@ -37,14 +44,14 @@ const useUndoable = (initialPresent: any, options: Options = defaultOptions) => 
 	}, [canRedo]);
 
 	const reset = useCallback((payload = initialPresent) => dispatch({ type: 'reset', payload }), []);
-	const resetInitialState = useCallback(payload => dispatch({ type: 'resetInitialState', payload }), []);
+	const resetInitialState = useCallback(payload => dispatch({ type: 'resetInitialState', payload }), []);	
 
 	const update = useCallback((payload, mutationBehavior: MutationBehavior) =>
 		dispatch({
 			type: 'update', 
 			payload, 
 			behavior: mutationBehavior,
-			historyLimit: options.historyLimit || defaultOptions.historyLimit
+			...compileMutateOptions(options)
 		}), []);
 
 

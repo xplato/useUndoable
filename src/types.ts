@@ -12,6 +12,8 @@ interface Action {
 	payload?: any;
 	behavior?: MutationBehavior;
 	historyLimit?: HistoryLimit;
+	ignoreIdenticalMutations?: boolean;
+	cloneState?: boolean;
 }
 
 interface State {
@@ -23,6 +25,8 @@ interface State {
 interface Options {
 	behavior?: MutationBehavior,
 	historyLimit?: HistoryLimit;
+	ignoreIdenticalMutations?: boolean;
+	cloneState?: boolean;
 }
 
 export type {

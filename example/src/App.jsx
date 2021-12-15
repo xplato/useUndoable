@@ -25,7 +25,9 @@ const App = () => {
 			resetInitialState
 		}
 	] = useUndoable(0, {
-		behavior
+		behavior,
+		ignoreIdenticalMutations: true,
+		cloneState: false
 	});
 
 	const getVisualItem = (items) => {
@@ -48,7 +50,11 @@ const App = () => {
 				<div className="j-divider"></div>
 
 				<div className="flex flex-row align-c mb-1r">
-					<Button onClick={() => setCount(c => c + 1)}>+</Button>
+					<Button onClick={() => {
+						let c = count + 1;
+						setCount(c);
+						setCount(c);
+					}}>+</Button>
 					<Button onClick={() => setCount(c => c - 1)}>-</Button>
 				</div>
 

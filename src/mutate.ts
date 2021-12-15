@@ -33,7 +33,13 @@ const ensureLimit = (limit: number | undefined, arr: any[]) => {
 
 const mutate = (state: State, action: Action) => {
 	const { past, present, future } = state;
-	const { payload, behavior, historyLimit } = action;
+	const {
+		payload,
+		behavior,
+		historyLimit,
+		ignoreIdenticalMutations,
+		cloneState
+	} = action;
 
 	if (!payload) {
 		// A mutation call requires a payload.
@@ -54,6 +60,12 @@ const mutate = (state: State, action: Action) => {
 		historyLimit !== 'infinity'
 	) {
 		mPast = ensureLimit(historyLimit, past);
+	}
+
+	const isEqual = JSON.stringify(payload) === JSON.stringify(present);
+
+	if (ignoreIdenticalMutations && isEqual) {
+		return cloneState ? { ...state } : state;
 	}
 
 	// We need to clone the array here because
@@ -84,7 +96,7 @@ const mutate = (state: State, action: Action) => {
 			present: payload,
 			future,
 		}
-	}	
+	}
 
 	// TypeScript tells us that the `behavior` key is possibly
 	// `undefined` because of the optional value specified in
@@ -98,7 +110,7 @@ const mutate = (state: State, action: Action) => {
 	// specify the behavior.
 	//
 	// @ts-ignore
-	return behaviorMap[behavior]
+	return behaviorMap[behavior];
 };
 
 export {
