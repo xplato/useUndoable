@@ -6,11 +6,15 @@ React Hook for undo/redo functionality without the hassle. This hook acts like t
 
 ## Installation
 
-`yarn add use-undoable`
+```bash
+yarn add use-undoable
+```
 
-or 
+or
 
-`npm install use-undoable`
+```bash
+npm install use-undoable
+```
 
 ## Usage
 
@@ -20,29 +24,27 @@ import useUndoable from 'use-undoable';
 const MyComponent = () => {
     const initialState = 0;
 
-    const [
-        count,
-        setCount,
-        {
-            undo,
-            redo
-        }
-    ] = useUndoable(initialState);
+    const [count, setCount, { undo, redo }] = useUndoable(initialState);
 
-    return <p>{count}</p>
-}
+    return (
+        <>
+            <p>{count}</p>
+            <button onClick={undo}>undo</button>
+        </>
+    );
+};
 ```
 
 ## Features
 
-(and how `useuUndoable` improves on existing packages)
+(and how `useUndoable` improves on existing packages)
 
-- Familiar API similar to `useState`
-- You can choose how you'd like state changes to be reflected, with `mergePastReversed`, `mergePast`, `destroyFuture`, or `keepFuture`
-- Ability to set default options so that each call to `setState` doesn't need to pass the same mutation behavior.
-- Set a history limit to prevent huge memory consumption.
-- Zero dependencies
-- Tiny; less than 40 kB unpacked
+-   Familiar API similar to `useState`
+-   You can choose how you'd like state changes to be reflected, with `mergePastReversed`, `mergePast`, `destroyFuture`, or `keepFuture`
+-   Ability to set default options so that each call to `setState` doesn't need to pass the same mutation behavior.
+-   Set a history limit to prevent huge memory consumption.
+-   Zero dependencies
+-   Tiny; less than 40 kB unpacked
 
 ### Docs
 
@@ -63,8 +65,8 @@ const [
         canUndo,
         redo,
         canRedo,
-        reset
-    }
+        reset,
+    },
 ] = useUndoable(initialState, options);
 ```
 
@@ -75,8 +77,8 @@ Here's an object showing all the option values in TypeScript format:
 ```js
 const options = {
     behavior: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keep future',
-    historyLimit: number | 'infinium' | 'infinity'
-}
+    historyLimit: number | 'infinium' | 'infinity',
+};
 ```
 
 Note: `options` is not required. It will default to the following if you don't specify it:
@@ -96,8 +98,8 @@ Declaring the mutation behavior in the `options` sets that behavior for all stat
 
 ```js
 const options = {
-    behavior: 'destroyFuture'
-}
+    behavior: 'destroyFuture',
+};
 ```
 
 With `destroyFuture`, all calls to `setCount` will destroy the future array on new state changes.
@@ -136,22 +138,22 @@ By default, this is set to `true`.
 
 Consider:
 
-```
-const onChange = (count) => {
-	const c = count + 1;
+```js
+const onChange = count => {
+    const c = count + 1;
 
-	setCount(c);
-	setCount(c);
-}
+    setCount(c);
+    setCount(c);
+};
 ```
 
 By default, this will only set the `count` once, and the other mutation is ignored. If you set it to `false`, however, this _would_ work and you'd see a state like this:
 
-```
+```js
 {
-	past: [..., 3, 4, 5],
-	present: 5,
-	future: []
+    past: [..., 3, 4, 5],
+    present: 5,
+    future: []
 }
 ```
 
@@ -187,9 +189,9 @@ or you can pass a callback function to which the `present` state is passed as a 
 setCount(c => c + 1);
 
 // Expanded
-setCount((count) => {
+setCount(count => {
     return count + 1;
-})
+});
 ```
 
 In this way, you can use the `useUndoable` hook just like the `useState` hook, just with some extra functions.
@@ -203,7 +205,7 @@ Version 2.0.0 added the `mutationBehavior` argument to this function. It allows 
 For example:
 
 ```js
-setCount(c => c + 1, 'mergePast')
+setCount(c => c + 1, 'mergePast');
 ```
 
 The default value is `mergePastReversed`.
@@ -404,9 +406,9 @@ Every time you make a state change, the previous state is saved in memory. It's 
 
 In general, you want to ask yourself the following:
 
-- How can I reduce the size of my state object while still keeping it useable?
-- How many actions in the past is reasonable for my project to store?
-- Should each "state" be a description of how to mutate some static object, or should it be the state object in itself?
+-   How can I reduce the size of my state object while still keeping it useable?
+-   How many actions in the past is reasonable for my project to store?
+-   Should each "state" be a description of how to mutate some static object, or should it be the state object in itself?
 
 On that last point: consider that your state is a large array of objects with many properties. Instead of storing the entire state, you could store descriptions of how the state was modified. For instance: `item at index 5 -> change 'name' property to value 'infinium'`. This way, your state changes are more efficient and use less memory than storing the entire array of objects.
 
@@ -430,14 +432,16 @@ const [
         canUndo: canUndoWithCustomName,
         redo: redoWithCustomName,
         canRedo: canRedoWithCustomName,
-        reset: deleteEverythingYo
-    }
-] = useUndoable([{
-    count: 1
-}]);
+        reset: deleteEverythingYo,
+    },
+] = useUndoable([
+    {
+        count: 1,
+    },
+]);
 
 deleteEverythingYo({
-    state: 'My new state'
+    state: 'My new state',
 });
 ```
 

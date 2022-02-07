@@ -1,3 +1,7 @@
+### PATCH : Version 3.3.2:
+
+- Fixed indentation and other issues in README.
+
 ### MINOR : Version 3.3.1:
 
 - Added `ignoreIdenticalMutations` option. This allows you to prevent identical `setState` calls from being pushed into the `past`. See the README for more information.
