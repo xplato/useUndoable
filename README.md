@@ -46,6 +46,18 @@ const MyComponent = () => {
 -   Zero dependencies
 -   Tiny; less than 40 kB unpacked
 
+## Why?
+
+There are existing packages that provide undo/redo functionality for React. So why, then, does this project exist? **To fill the gaps they don't.**
+
+As explained in this README, most undo/redo packages default to the `destroyFuture` behavior. I don't think this is a good approach. There's a problem: after undoing some change and then making another change on that branch, the previous state changes are destroyed.
+
+The problem with many existing projects that I've found is that they implicitly force a certain behavior. If you don't like the `future` being destroyed, you either have to implement your own solution or deal with it.
+
+Or, as evidenced by the fact that you're reading this, you use useUndoable. This project excels in subjectivity. That is, the behavior of the state can be adjusted at your discretion, and on-the-fly. **No longer do we have this lock-in behavior that dictates how users use your application.**
+
+If you like what you're reading, continue on below to learn how to use it.
+
 ### Docs
 
 This section explains the values given by the `useUndoable` hook. **Make sure to read until the end of the README,** just in case there's an option or function that will suit your use-case.
@@ -54,8 +66,8 @@ Let's assume that we've called the hook and set **all** of the exported values:
 
 ```js
 const [
-    count,
-    setCount,
+    state,
+    setState,
 
     {
         past,
@@ -76,7 +88,7 @@ Here's an object showing all the option values in TypeScript format:
 
 ```js
 const options = {
-    behavior: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keep future',
+    behavior: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keepFuture',
     historyLimit: number | 'infinium' | 'infinity',
 };
 ```
@@ -92,7 +104,7 @@ Note: `options` is not required. It will default to the following if you don't s
 
 #### `behavior`
 
-Allowed values: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keep future'
+Allowed values: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keepFuture'
 
 Declaring the mutation behavior in the `options` sets that behavior for all state changes. This behavior can be overridden within individual state mutations.
 
