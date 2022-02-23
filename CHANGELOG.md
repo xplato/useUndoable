@@ -1,3 +1,8 @@
+### PATCH : Version 3.3.3:
+
+- Fixed an issue where using an invalid key for `behavior` would cause an undefined error internally. Now, we check if the behavior key is valid and, if not, throw an error.
+- Fixed some typos in the README.
+
 ### PATCH : Version 3.3.2:
 
 - Fixed indentation and other issues in README.

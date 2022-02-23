@@ -1,4 +1,4 @@
-import { payloadError } from './errors';
+import { payloadError, invalidBehavior } from './errors';
 
 import type { Action, State } from './types';
 
@@ -108,7 +108,10 @@ const mutate = (state: State, action: Action) => {
 	// It was left potentially undefined within the Action
 	// type so that all calls to `dispatch` don't need to
 	// specify the behavior.
-	//
+
+	// @ts-ignore
+	if (!behaviorMap.hasOwnProperty(behavior)) invalidBehavior(behavior);
+	
 	// @ts-ignore
 	return behaviorMap[behavior];
 };

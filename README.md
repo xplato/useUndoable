@@ -124,7 +124,7 @@ Allowed values: number (> 0) | 'infinium' | 'infinity'
 
 (Note: the `infinium` option is the same as `infinity`. It's just a nod to the name of our company.)
 
-Defines the max size for the history. The default is `100.` The resulting `past` array will be +1 whatever number you give. That is, if you set the `historyLimit` to 5, there will actually be 6 total items within the array because the `present` is merged into it on every state change.
+Defines the max size for the history. The default is `100`. The resulting `past` array will be +1 whatever number you give. That is, if you set the `historyLimit` to 5, there will actually be 6 total items within the array because the `present` is merged into it on every state change.
 
 Therefore, if your project absolutely requires there to be only 1,000 **total** items, for example, set the limit to `999`.
 
@@ -399,6 +399,8 @@ const MyComponent = () => {
 ```
 
 Note: it is important that this function is only called once. If you call it multiple times with an existing state, you run the risk of accidentally deleteing _legitimate_ state values and replacing it with some generic (or "starting") one.
+
+One more note: This function **does not** reset the _actual_ state you passed into the hook itself (`useUndoable([])`); it only changes the item at index `0` in the `past` array.
 
 ## Performance considerations
 
