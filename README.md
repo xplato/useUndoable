@@ -100,9 +100,9 @@ Let's take a moment and look at what the internal state of useUndoable looks lik
 
 ```js
 {
-	past: [0, 1, 2],
-	present: 3,
-	future: []
+    past: [0, 1, 2],
+    present: 3,
+    future: []
 }
 ```
 
@@ -112,9 +112,9 @@ Let's take the above object and call `undo()` on it. The resulting state would l
 
 ```js
 {
-	past: [0, 1],
-	present: 2,
-	future: [3]
+    past: [0, 1],
+    present: 2,
+    future: [3]
 }
 ```
 
@@ -136,8 +136,8 @@ The `options` object looks like this:
 interface Options {
     behavior?: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keepFuture';
     historyLimit?: number | 'infinium' | 'infinity';
-	ignoreIdenticalMutations?: boolean;
-	cloneState?: boolean;
+    ignoreIdenticalMutations?: boolean;
+    cloneState?: boolean;
 };
 ```
 
@@ -163,9 +163,9 @@ Assume we start with the following state object:
 
 ```js
 {
-	past: [],
-	present: 0,
-	future: []
+    past: [],
+    present: 0,
+    future: []
 }
 ```
 
@@ -173,9 +173,9 @@ Let's call `setYourState(s => s + 1)` twice. This leaves us with:
 
 ```js
 {
-	past: [0, 1],
-	present: 2,
-	future: []
+    past: [0, 1],
+    present: 2,
+    future: []
 }
 ```
 
@@ -183,9 +183,9 @@ Let us now call `undo()` twice. We are left with:
 
 ```js
 {
-	past: [],
-	present: 0,
-	future: [1, 2]
+    past: [],
+    present: 0,
+    future: [1, 2]
 }
 ```
 
@@ -199,9 +199,9 @@ Let's go back to this state:
 
 ```js
 {
-	past: [],
-	present: 0,
-	future: [1, 2]
+    past: [],
+    present: 0,
+    future: [1, 2]
 }
 ```
 
@@ -209,9 +209,9 @@ If we call `setYourState(s => s + 1)` now, it would erase the future. The result
 
 ```js
 {
-	past: [0],
-	present: 1,
-	future: []
+    past: [0],
+    present: 1,
+    future: []
 }
 ```
 
@@ -232,9 +232,9 @@ Therefore, contrary to the `destroyFuture` option, the resulting object would lo
 
 ```js
 {
-	past: [0],
-	present: 1,
-	future: [1, 2]
+    past: [0],
+    present: 1,
+    future: [1, 2]
 }
 ```
 
