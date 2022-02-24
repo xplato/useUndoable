@@ -1,3 +1,7 @@
+### PATCH : Version 3.3.5:
+
+- Rewrote many parts of the README for more clarity.
+
 ### PATCH : Version 3.3.4:
 
 - Fixed some typos in the README
