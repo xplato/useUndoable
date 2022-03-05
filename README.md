@@ -60,9 +60,13 @@ If you like what you're reading, continue on below to learn how to use it.
 
 ## Documentation
 
-Note: I highly recommend getting a deep understanding of how the state works. To do this, simply open up the [live demo](https://codesandbox.io/s/use-undoable-zi0b4) and make the state there look like the examples below. This will help you to see how the state is internally modified. Doing this will help you make better decisions about the options and behavior this package offers.
+This README is the entire documentation. It is written such that you are meant to read it from top to bottom, without skipping around. You see, this project is, in a general sense, quite simple. It is imperative, however, that you have a deeper understanding of how it works. Having this understanding will allow you to make better decisions about the options and behaviors this package offers.
 
-This packages only exports a single hook, so the documentation is explained below. I'll start by describing the API of the hook, and then move into the options and behavior.
+The best way to visualize how the useUndoable state system works is to use the [live demo](https://codesandbox.io/s/use-undoable-zi0b4) as a companion to this README. Simply open it up and make the state there match the examples offered below.
+
+Let's start by going into the API of the hook. Afterwards, we'll move into the options and behavior.
+
+### The API
 
 The API is rather straightforward. You start by initializing the state, giving it a name and naming the updater function. Then, you simply initialize the `undo` and `redo` functions in an object.
 
@@ -122,9 +126,11 @@ and, by extension, the `redo()` function will do the opposite of this, making th
 
 Simply call `undo` and `redo` whenever you'd like, and those changes will be reflected in the state and your component will re-render with the new data.
 
-### Options & Behavior
+---
 
-One of the key features of useUndoable is that the behavior can be customized. This means that this package doesn't force a specific behavior, like I mentioned in the "Why?" section.
+That covers most of the API you'll be working with. There are, however, some lesser-used API values that are explained after the Options & Behavior section below.
+
+### Options & Behavior
 
 #### Options
 
@@ -132,7 +138,7 @@ The `useUndoable` hook accepts two parameters: `initialState` and `options`. The
 
 The `options` object looks like this:
 
-```js
+```ts
 interface Options {
     behavior?: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keepFuture';
     historyLimit?: number | 'infinium' | 'infinity';
