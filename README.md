@@ -4,6 +4,8 @@ React Hook adding undo/redo functionality to `useState` with a hassle-free API a
 
 [**See the Live Demo**](https://codesandbox.io/s/use-undoable-zi0b4)
 
+Note: Information about integration with React Flow v10 is near the bottom of this document.
+
 ## Installation
 
 ```bash
@@ -380,6 +382,29 @@ deleteItAll({
 ```
 
 And, of course, you can set `count, setCount` to anything you want by default, since they are array items.
+
+## Integration with React Flow v10
+
+React Flow v10 added new (and much better) ways to manage the internal state of the `ReactFlow` component. Most notably, the state of nodes and edges have been separated. When you try to integrate useUndoable with v10 as their documentation suggestions, you'll run into some weird issues with re-renders and state updates.
+
+The primary cause for most of these issues is that **you are trying to manage multiple state instances at once.** In effect, useUndoable may try to overwrite React Flow's state and vice/versa.
+
+The solution to this problem is very simple: make useUndoable the **exclusive** state manager for nodes and edges.
+
+This way, nothing will be arbitrarily overwritten, and it will work as expected.
+
+See the updated `react-flow-example/src/App.jsx` file for ways to work with React Flow v10.
+
+The `react-flow-example` does do something "unexpected:" moving a node counts as a **series** of state updates. This means that useUndoable **will count each drag event as individual pieces of history.**
+
+For instance:
+
+- You have Node A with position 0, 0
+- You move Node A to position 100, 100
+
+This is not one state update in React Flow v10. Instead, a `drag` event is fired for, more or less, every unit you move: 0 -> 1 -> 2 -> 3 -> and so on.
+
+This is not a flaw with useUndoable itself, because those state changes are legitimate. Therefore, it is up to you and your project to determine the best way to track React Flow's state changes.
 
 ## Contributing
 

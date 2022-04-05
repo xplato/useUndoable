@@ -10,7 +10,7 @@
     "@heroicons/react": "^1.0.5",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
-    "react-flow-renderer": "^9.7.0",
+    "react-flow-renderer": "^10.0.8",
     "react-scripts": "^4.0.3",
     "use-undoable": "link:.."
   },

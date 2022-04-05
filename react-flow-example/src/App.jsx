@@ -1,11 +1,14 @@
 import useUndoable from 'use-undoable';
-import ReactFlow, { addEdge, removeElements } from 'react-flow-renderer';
+import { useEffect, useCallback } from 'react';
+import ReactFlow, { addEdge, applyNodeChanges } from 'react-flow-renderer';
 
 import { initialElements } from './els';
-import { useEffect } from 'react';
+
 
 const Button = ({ children, ...props }) => (
-	<button {...props} className='j-button app gray mh-0-5r'>{children}</button>
+	<button {...props} className='j-button app gray mh-0-5r'>
+		{children}
+	</button>
 );
 
 const Buttons = ({ undo, redo, reset }) => (
@@ -17,51 +20,59 @@ const Buttons = ({ undo, redo, reset }) => (
 );
 
 const App = () => {
-	const [
-		elements,
-		setElements,
-		{
-			undo,
-			// canUndo,
-
-			redo,
-			// canRedo,
-
-			reset,
-			// resetInitialState
-		}
-	] = useUndoable(initialElements);
+	const [elements, setElements, { undo, redo, reset }] = useUndoable({
+		nodes: initialElements,
+		edges: [],
+	});
 
 	useEffect(() => {
-		console.log(elements)
+		console.log(elements);
 	}, [elements]);
 
-	const mergeUpdate = (node) => {
-		setElements(els => els.map(e => {
-			if (e.id === node.id) {
-				return {
-					...e,
-					...node
-				}
-			}
+	const triggerUpdate = useCallback(
+		(t, v) => {
+			// To prevent a mismatch of state updates,
+			// we'll use the value passed into this
+			// function instead of the state directly.
+			setElements(e => ({
+				nodes: t === 'nodes' ? v : e.nodes,
+				edges: t === 'edges' ? v : e.edges,
+			}));
+		},
+		[setElements]
+	);
 
-			return e;
-		}));
-	}
 
-	const onElementsRemove = (elementsToRemove) =>
-    setElements((els) => removeElements(elementsToRemove, els));
-	const onConnect = (params) => setElements((els) => addEdge(params, els));
+	// We declare these callbacks as React Flow suggests,
+	// but we don't set the state directly. Instead, we pass
+	// it to the triggerUpdate function so that it alone can
+	// handle the state updates.
+
+	const onNodesChange = useCallback(
+		(changes) => {
+			triggerUpdate('nodes', applyNodeChanges(changes, elements.nodes));
+		},
+		[triggerUpdate, elements.nodes]
+	);
+
+	const onEdgesChange = useCallback(
+		(connection) => {
+			triggerUpdate('edges', addEdge(connection, elements.edges));
+		},
+		[triggerUpdate, elements.edges]
+	);
 
 	return (
-		<div className="w-screen h-screen">
+		<div className='w-screen h-screen'>
 			<Buttons undo={undo} redo={redo} reset={reset} />
 
 			<ReactFlow
-				elements={elements}
-				onNodeDragStop={(ev, node) => mergeUpdate(node)}
-				onConnect={onConnect}
-				onElementsRemove={onElementsRemove}
+				nodes={elements?.nodes}
+				edges={elements?.edges}
+
+				onNodesChange={onNodesChange}
+				onEdgesChange={onEdgesChange}
+				onConnect={onEdgesChange}
 
 				deleteKeyCode={8}
 				zoomOnScroll={false}

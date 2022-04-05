@@ -1,3 +1,7 @@
+### PATCH : Version 3.3.6:
+
+- Updated the `react-flow-example` to work with `react-flow-renderer@10.x.x`. See the README for more details about v10 integration.
+
 ### PATCH : Version 3.3.5:
 
 - Rewrote many parts of the README for more clarity.
