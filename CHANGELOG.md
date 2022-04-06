@@ -1,3 +1,7 @@
+### PATCH : Version 3.3.7:
+
+- Add `present` type parameter in useUndoable function. Thanks to [Himself65!](https://github.com/Himself65)
+
 ### PATCH : Version 3.3.6:
 
 - Updated the `react-flow-example` to work with `react-flow-renderer@10.x.x`. See the README for more details about v10 integration.

@@ -25,16 +25,16 @@ const compileMutateOptions = (options: Options) => ({
 const useUndoable = <T = any>(initialPresent: T, options: Options = defaultOptions): [
 	T,
 	(payload: T | ((oldValue: T) => T) , behavior?: MutationBehavior) => void,
-  {
-    past: T[]
-    future: T[]
-    undo: () => void
-    canUndo: boolean
-    redo: () => void
-    canRedo: boolean
-    reset: (initialState?: T) => void
-    resetInitialState: (newInitialState: T) => void
-  }
+ 	{
+		past: T[]
+		future: T[]
+		undo: () => void
+		canUndo: boolean
+		redo: () => void
+		canRedo: boolean
+		reset: (initialState?: T) => void
+    	resetInitialState: (newInitialState: T) => void
+	}
 ] => {
 	const [state, dispatch] = useReducer(reducer, {
 		...initialState,
