@@ -22,7 +22,20 @@ const compileMutateOptions = (options: Options) => ({
 	...options
 });
 
-const useUndoable = (initialPresent: any, options: Options = defaultOptions) => {
+const useUndoable = <T = any>(initialPresent: T, options: Options = defaultOptions): [
+	T,
+	(payload: T | ((oldValue: T) => T) , behavior?: MutationBehavior) => void,
+  {
+    past: T[]
+    future: T[]
+    undo: () => void
+    canUndo: boolean
+    redo: () => void
+    canRedo: boolean
+    reset: (initialState?: T) => void
+    resetInitialState: (newInitialState: T) => void
+  }
+] => {
 	const [state, dispatch] = useReducer(reducer, {
 		...initialState,
 		present: initialPresent
@@ -44,12 +57,12 @@ const useUndoable = (initialPresent: any, options: Options = defaultOptions) => 
 	}, [canRedo]);
 
 	const reset = useCallback((payload = initialPresent) => dispatch({ type: 'reset', payload }), []);
-	const resetInitialState = useCallback(payload => dispatch({ type: 'resetInitialState', payload }), []);	
+	const resetInitialState = useCallback(payload => dispatch({ type: 'resetInitialState', payload }), []);
 
 	const update = useCallback((payload, mutationBehavior: MutationBehavior) =>
 		dispatch({
-			type: 'update', 
-			payload, 
+			type: 'update',
+			payload,
 			behavior: mutationBehavior,
 			...compileMutateOptions(options)
 		}), []);
