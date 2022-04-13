@@ -62,7 +62,11 @@ If you like what you're reading, continue on below to learn how to use it.
 
 ## Documentation
 
-This README is the entire documentation. It is written such that you are meant to read it from top to bottom, without skipping around. You see, this project is, in a general sense, quite simple. It is imperative, however, that you have a deeper understanding of how it works. Having this understanding will allow you to make better decisions about the options and behaviors this package offers.
+useUndoable is one of those projects that doesn't have a massive layer of abstraction. In comparison to a project like, say, React, _how_ you use the program greatly differs from how it is built.
+
+This project is slightly different. Instead of just going through the API in a superficial way, I will actually teach you, more or less, how useUndoable works under-the-hood. You see, this project is, in a general sense, quite simple. It is imperative, however, that you have a deeper understanding of how it works. Having this understanding will allow you to make better decisions about the options and behaviors this package offers.
+
+This README is the entire documentation. It is written such that you are meant to read it from top to bottom, without skipping around.
 
 The best way to visualize how the useUndoable state system works is to use the [live demo](https://codesandbox.io/s/use-undoable-zi0b4) as a companion to this README. Simply open it up and make the state there match the examples offered below.
 
