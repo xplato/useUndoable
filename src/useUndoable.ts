@@ -1,8 +1,8 @@
-import { useReducer, useCallback } from 'react';
+import { useReducer, useCallback, useRef } from 'react';
 
 import { reducer } from './reducer';
 
-import type { MutationBehavior, Options } from './types';
+import type { MutationBehavior, Options, State } from './types';
 
 const initialState = {
 	past: [],
@@ -24,8 +24,8 @@ const compileMutateOptions = (options: Options) => ({
 
 const useUndoable = <T = any>(initialPresent: T, options: Options = defaultOptions): [
 	T,
-	(payload: T | ((oldValue: T) => T) , behavior?: MutationBehavior) => void,
- 	{
+	(payload: T | ((oldValue: T) => T), behavior?: MutationBehavior) => void,
+	{
 		past: T[]
 		future: T[]
 		undo: () => void
@@ -33,11 +33,14 @@ const useUndoable = <T = any>(initialPresent: T, options: Options = defaultOptio
 		redo: () => void
 		canRedo: boolean
 		reset: (initialState?: T) => void
-    	resetInitialState: (newInitialState: T) => void
-		static_setState: (payload: T | ((oldValue: T) => T) , behavior?: MutationBehavior) => void,
+		resetInitialState: (newInitialState: T) => void
 	}
 ] => {
-	const [state, dispatch] = useReducer(reducer, {
+	const stateRef = useRef<State>({
+		...initialState,
+		present: initialPresent
+	});
+	const [state, dispatch] = useReducer(reducer(stateRef), {
 		...initialState,
 		present: initialPresent
 	});
@@ -72,19 +75,15 @@ const useUndoable = <T = any>(initialPresent: T, options: Options = defaultOptio
 
 	// We can ignore the undefined type error here because
 	// we are setting a default value to options.
-	const setState = useCallback((
-		payload: any,
-
-		// @ts-ignore
-		mutationBehavior: MutationBehavior = options.behavior,
-		ignoreAction: boolean = false
-	) => {
+	//
+	// @ts-ignore
+	const setState = useCallback((payload: any, mutationBehavior: MutationBehavior = options.behavior, ignoreAction: boolean = false) => {
 		return typeof payload === 'function' ? (
-			update(payload(state.present), mutationBehavior, ignoreAction)
+			update(payload(stateRef.current.present), mutationBehavior, ignoreAction)
 		) : (
 			update(payload, mutationBehavior, ignoreAction)
 		);
-	}, [state]);
+	}, [update, options]);
 
 	// In some rare cases, the fact that the above setState
 	// function changes on every render can be problematic.
@@ -95,15 +94,6 @@ const useUndoable = <T = any>(initialPresent: T, options: Options = defaultOptio
 	//
 	// Wrapping it in useCallback isn't really necessary,
 	// but it's consistent with everything else.
-	const static_setState = useCallback((
-		payload: any,
-
-		// @ts-ignore
-		mutationBehavior: MutationBehavior = options.behavior,
-		ignoreAction: boolean = false,
-	) => {
-		update(payload, mutationBehavior, ignoreAction);
-	}, []);
 
 	return [
 		state.present,
@@ -119,7 +109,6 @@ const useUndoable = <T = any>(initialPresent: T, options: Options = defaultOptio
 
 			reset,
 			resetInitialState,
-			static_setState,
 		}
 	];
 }
