@@ -14,6 +14,7 @@ interface Action {
 	historyLimit?: HistoryLimit;
 	ignoreIdenticalMutations?: boolean;
 	cloneState?: boolean;
+	ignoreAction?: boolean;
 }
 
 interface State {

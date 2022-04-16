@@ -60,24 +60,29 @@ const useUndoable = <T = any>(initialPresent: T, options: Options = defaultOptio
 	const reset = useCallback((payload = initialPresent) => dispatch({ type: 'reset', payload }), []);
 	const resetInitialState = useCallback(payload => dispatch({ type: 'resetInitialState', payload }), []);
 
-	const update = useCallback((payload, mutationBehavior: MutationBehavior) =>
+	const update = useCallback((payload, mutationBehavior: MutationBehavior, ignoreAction: boolean) =>
 		dispatch({
 			type: 'update',
 			payload,
 			behavior: mutationBehavior,
+			ignoreAction,
 			...compileMutateOptions(options)
 		}), []);
 
 
 	// We can ignore the undefined type error here because
 	// we are setting a default value to options.
-	//
-	// @ts-ignore
-	const setState = useCallback((payload: any, mutationBehavior: MutationBehavior = options.behavior) => {
+	const setState = useCallback((
+		payload: any,
+
+		// @ts-ignore
+		mutationBehavior: MutationBehavior = options.behavior,
+		ignoreAction: boolean = false
+	) => {
 		return typeof payload === 'function' ? (
-			update(payload(state.present), mutationBehavior)
+			update(payload(state.present), mutationBehavior, ignoreAction)
 		) : (
-			update(payload, mutationBehavior)
+			update(payload, mutationBehavior, ignoreAction)
 		);
 	}, [state]);
 
@@ -90,13 +95,14 @@ const useUndoable = <T = any>(initialPresent: T, options: Options = defaultOptio
 	//
 	// Wrapping it in useCallback isn't really necessary,
 	// but it's consistent with everything else.
-	//
-	// We ignore this for the same reason as in the setState
-	// function.
-	//
-	// @ts-ignore
-	const static_setState = useCallback((payload: any, mutationBehavior: MutationBehavior = options.behavior) => {
-		update(payload, mutationBehavior);
+	const static_setState = useCallback((
+		payload: any,
+
+		// @ts-ignore
+		mutationBehavior: MutationBehavior = options.behavior,
+		ignoreAction: boolean = false,
+	) => {
+		update(payload, mutationBehavior, ignoreAction);
 	}, []);
 
 	return [

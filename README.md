@@ -102,6 +102,24 @@ setYourState(yourState + 1);
 setYourState((currentState) => currentState + 1);
 ```
 
+The `setState` function accepts, in total, 3 parameters:
+
+- The state you want to set or a function to set it
+- The mutation behavior of this one `setState` call (optional)
+- The `ignoreAction` boolean (optional)
+
+The mutation behavior is described below. Normally, the mutation behavior is a global value, but you can alter it within individual state updates if you want.
+
+The `ignoreAction` boolean indicates whether or not to update the `past` and `future` of useUndoable's internal state. Essentially, if you set this to `true`, when you make a state update with `setState(c + 1)`, it will **only** update the **present** state. In other words, it will act like the normal `useState` hook.
+
+If you want to use the global mutation behavior and set the `ignoreAction` bool, set mutation behavior to `null`:
+
+```js
+const [yourState, setYourState, { undo, redo }] = useUndoable();
+
+setYourState(yourState + 1, null, true);
+```
+
 Heads up: Are you pulling data from an API? Stick around to read how to handle that properly with useUndoable.
 
 ### Undoing and Redoing changes

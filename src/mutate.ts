@@ -38,7 +38,8 @@ const mutate = (state: State, action: Action) => {
 		behavior,
 		historyLimit,
 		ignoreIdenticalMutations,
-		cloneState
+		cloneState,
+		ignoreAction,
 	} = action;
 
 	if (!payload) {
@@ -51,6 +52,14 @@ const mutate = (state: State, action: Action) => {
 		// If you want to set the state to `undefined`,
 		// pass that explicitly.
 		payloadError('mutate');
+	}
+
+	if (ignoreAction) {
+		return {
+			past,
+			present: payload,
+			future,
+		};
 	}
 
 	let mPast = [...past];

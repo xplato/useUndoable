@@ -1,3 +1,7 @@
+### PATCH : Version 3.3.9:
+
+- Added new `ignoreAction` parameter to the `setState` function. This allows you to update only the `present` state and not touch the `past` or `future`.
+
 ### PATCH : Version 3.3.8:
 
 - Add new `static_setState` function to handle rare cases like in [issue #5](https://github.com/Infinium8/useUndoable/issues/5)
