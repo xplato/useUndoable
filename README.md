@@ -268,6 +268,7 @@ const [
         redo,
         canRedo,
         reset,
+        static_setState,
     },
 ] = useUndoable(initialState, options);
 ```
@@ -339,6 +340,14 @@ const MyComponent = () => {
 Note: it is important that this function is only called once. If you call it multiple times with an existing state, you run the risk of accidentally deleteing _legitimate_ state values and replacing it with some generic (or "starting") one.
 
 One more note: This function **does not** reset the _actual_ state you passed into the hook itself (`useUndoable([])`); it only changes the item at index `0` in the `past` array.
+
+### `static_setState`
+
+In some rare cases, you may run into the issue that the default `setState` function changes with every state change. This is, more or less, by design.
+
+One key behavior of the default `setState` is that you can pass either a value or a function. The function receives the present state as a parameter. As such, the function itself needs to change whenever the present state changes.
+
+If you have an issue with this, you can use the `static_setState` function. This **does not** accept a function, only a new value. This means it only needs to be created once.
 
 ## Performance considerations
 
