@@ -34,6 +34,7 @@ const useUndoable = <T = any>(initialPresent: T, options: Options = defaultOptio
 		canRedo: boolean
 		reset: (initialState?: T) => void
     	resetInitialState: (newInitialState: T) => void
+		static_setState: (payload: T | ((oldValue: T) => T) , behavior?: MutationBehavior) => void,
 	}
 ] => {
 	const [state, dispatch] = useReducer(reducer, {
@@ -72,13 +73,31 @@ const useUndoable = <T = any>(initialPresent: T, options: Options = defaultOptio
 	// we are setting a default value to options.
 	//
 	// @ts-ignore
-	const setState = (payload: any, mutationBehavior: MutationBehavior = options.behavior) => {
+	const setState = useCallback((payload: any, mutationBehavior: MutationBehavior = options.behavior) => {
 		return typeof payload === 'function' ? (
 			update(payload(state.present), mutationBehavior)
 		) : (
 			update(payload, mutationBehavior)
 		);
-	}
+	}, [state]);
+
+	// In some rare cases, the fact that the above setState
+	// function changes on every render can be problematic.
+	// Since we can't really avoid this (setState uses
+	// state.present), we must export another function that
+	// doesn't depend on the present state (and thus doesn't
+	// need to change).
+	//
+	// Wrapping it in useCallback isn't really necessary,
+	// but it's consistent with everything else.
+	//
+	// We ignore this for the same reason as in the setState
+	// function.
+	//
+	// @ts-ignore
+	const static_setState = useCallback((payload: any, mutationBehavior: MutationBehavior = options.behavior) => {
+		update(payload, mutationBehavior);
+	}, []);
 
 	return [
 		state.present,
@@ -93,7 +112,8 @@ const useUndoable = <T = any>(initialPresent: T, options: Options = defaultOptio
 			canRedo,
 
 			reset,
-			resetInitialState
+			resetInitialState,
+			static_setState,
 		}
 	];
 }

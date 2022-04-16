@@ -1,3 +1,7 @@
+### PATCH : Version 3.3.8:
+
+- Add new `static_setState` function to handle rare cases like in [issue #5](https://github.com/Infinium8/useUndoable/issues/5)
+
 ### PATCH : Version 3.3.7:
 
 - Add `present` type parameter in useUndoable function. Thanks to [Himself65!](https://github.com/Himself65)
