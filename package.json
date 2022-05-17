@@ -1,6 +1,6 @@
 {
   "name": "use-undoable",
-  "version": "3.3.9",
+  "version": "3.3.10",
   "description": "React hook for undo/redo functionality without the hassle.",
   "private": false,
   "author": "Infinium LLC.",
@@ -18,7 +18,7 @@
     "prepare": "run-s build"
   },
   "peerDependencies": {
-    "react": "^17.0.2"
+    "react": "17 || 18"
   },
   "devDependencies": {
     "@types/node": "^12.12.38",

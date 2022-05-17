@@ -1,3 +1,7 @@
+### PATCH : Version 3.3.10:
+
+- Upgrade `react` peer dependency to `17 || 18`
+
 ### PATCH : Version 3.3.9:
 
 - Added new `ignoreAction` parameter to the `setState` function. This allows you to update only the `present` state and not touch the `past` or `future`.
