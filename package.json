@@ -1,6 +1,6 @@
 {
   "name": "use-undoable",
-  "version": "3.3.10",
+  "version": "3.3.11",
   "description": "React hook for undo/redo functionality without the hassle.",
   "private": false,
   "author": "Infinium LLC.",
@@ -27,8 +27,8 @@
     "cross-env": "^7.0.2",
     "microbundle-crl": "^0.13.10",
     "npm-run-all": "^4.1.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18",
+    "react-dom": "^18",
     "react-scripts": "^3.4.1",
     "typescript": "^3.7.5"
   },

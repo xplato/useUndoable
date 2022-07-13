@@ -1,3 +1,10 @@
+### PATCH : Version 3.3.11:
+
+- Added `ignoreAction` to the parameter list of `setState` and `static_setState` ([#9](https://github.com/Infinium8/useUndoable/issues/9))
+- Corrected a typo in the `MutationBehavior` type. `keepFuture` was represented as `keep future` for some reason.
+- Deleted the old `example/` folder and replaced it with the new `demo/` folder which is made with TypeScript.
+- Reformatted the `useUndoable.ts` file.
+
 ### PATCH : Version 3.3.10:
 
 - Upgrade `react` peer dependency to `17 || 18`

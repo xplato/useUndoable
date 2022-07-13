@@ -5,7 +5,7 @@ type MutationBehavior =
 	'mergePastReversed' |
 	'mergePast' |
 	'destroyFuture' |
-	'keep future';
+	'keepFuture';
 
 interface Action {
 	type: ActionType;
