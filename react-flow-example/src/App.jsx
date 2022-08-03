@@ -1,6 +1,6 @@
 import useUndoable from 'use-undoable';
 import { useEffect, useCallback } from 'react';
-import ReactFlow, { addEdge, applyNodeChanges } from 'react-flow-renderer';
+import ReactFlow, { addEdge, applyEdgeChanges, applyNodeChanges } from 'react-flow-renderer';
 
 import { initialElements } from './els';
 
@@ -56,6 +56,13 @@ const App = () => {
 	);
 
 	const onEdgesChange = useCallback(
+		(changes) => {
+			triggerUpdate('edges', applyEdgeChanges(changes, elements.edges));
+		},
+		[triggerUpdate, elements.edges]
+	);
+
+	const onConnect = useCallback(
 		(connection) => {
 			triggerUpdate('edges', addEdge(connection, elements.edges));
 		},
@@ -72,7 +79,7 @@ const App = () => {
 
 				onNodesChange={onNodesChange}
 				onEdgesChange={onEdgesChange}
-				onConnect={onEdgesChange}
+				onConnect={onConnect}
 
 				deleteKeyCode={8}
 				zoomOnScroll={false}
