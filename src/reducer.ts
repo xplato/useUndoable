@@ -1,69 +1,69 @@
-import { mutate } from './mutate';
-import { payloadError } from './errors';
+import { mutate } from "./mutate"
+import { payloadError } from "./errors"
 
-import type { Action, State } from './types';
+import type { Action, State } from "./types"
 
-const reducer = (state: State, action: Action): State => {
-	const { past, present, future } = state;
+export const reducer = (state: State, action: Action): State => {
+	const { past, present, future } = state
 
 	const undo = () => {
 		if (past.length === 0) {
-			return state;
+			return state
 		}
 
-		const previous = past[past.length - 1];
-		const newPast = past.slice(0, past.length - 1);
+		const previous = past[past.length - 1]
+		const newPast = past.slice(0, past.length - 1)
 
 		return {
 			past: newPast,
 			present: previous,
-			future: [present, ...future]
-		};
+			future: [present, ...future],
+		}
 	}
 
 	const redo = () => {
 		if (future.length === 0) {
-			return state;
+			return state
 		}
 
-		const next = future[0];
-		const newFuture = future.slice(1);
+		const next = future[0]
+		const newFuture = future.slice(1)
 
 		return {
 			past: [...past, present],
 			present: next,
-			future: newFuture
+			future: newFuture,
 		}
 	}
 
-	const update = () => mutate(state, action);
+	const update = () => mutate(state, action)
 
 	const reset = () => {
-		const { payload } = action;
+		const { payload } = action
 
 		return {
 			past: [],
 			present: payload,
-			future: []
-		};
-	};
+			future: [],
+		}
+	}
 
 	const resetInitialState = () => {
-		const { payload } = action;
+		const { payload } = action
 
 		if (!payload) {
-			payloadError('resetInitialState');
+			payloadError("resetInitialState")
 		}
 
 		// Duplicate the past for mutation
-		let mPast = [...past];
-		mPast[0] = payload;
+		let mPast = [...past]
+		mPast[0] = payload
 
 		return {
 			past: [...mPast],
 			present,
-			future: [...future]
-		};
+			future: [...future],
+		}
 	}
 
 	const actions = {
@@ -71,12 +71,8 @@ const reducer = (state: State, action: Action): State => {
 		redo,
 		update,
 		reset,
-		resetInitialState
+		resetInitialState,
 	}
 
-	return actions[action.type]();
-};
-
-export {
-	reducer
+	return actions[action.type]()
 }

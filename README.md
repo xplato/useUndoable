@@ -4,7 +4,7 @@ React Hook adding undo/redo functionality to `useState` with a hassle-free API a
 
 [**See the Live Demo**](https://codesandbox.io/s/use-undoable-zi0b4)
 
-Note: Information about integration with React Flow v10 is near the bottom of this document.
+Integrating with React Flow v10? [Read this.](#integration-with-react-flow-v10)
 
 ## Installation
 
@@ -21,20 +21,20 @@ npm install use-undoable
 ## Basic Usage
 
 ```js
-import useUndoable from 'use-undoable';
+import useUndoable from "use-undoable"
 
 const MyComponent = () => {
-    const initialState = 0;
+  const initialState = 0
 
-    const [count, setCount, { undo, redo }] = useUndoable(initialState);
+  const [count, setCount, { undo, redo }] = useUndoable(initialState)
 
-    return (
-        <>
-            <p>{count}</p>
-            <button onClick={undo}>undo</button>
-        </>
-    );
-};
+  return (
+    <>
+      <p>{count}</p>
+      <button onClick={undo}>undo</button>
+    </>
+  )
+}
 ```
 
 ## Features
@@ -79,13 +79,13 @@ The API is rather straightforward. You start by initializing the state, giving i
 ### State
 
 ```js
-const [yourState, setYourState, { undo, redo }] = useUndoable(initialState);
+const [yourState, setYourState, { undo, redo }] = useUndoable(initialState)
 ```
 
 Notice how the left-two variables look similar to the `useState` API:
 
 ```js
-const [yourState, setYourState] = useState(initialState);
+const [yourState, setYourState] = useState(initialState)
 ```
 
 This is an intentional choice. You see, useUndoable is designed to mimick this behavior—both in looks and functionality.
@@ -95,18 +95,18 @@ One primary thing to note is that the updater function (`setYourState`) accepts 
 That is, both of these are valid:
 
 ```js
-setYourState(yourState + 1);
+setYourState(yourState + 1)
 ```
 
 ```js
-setYourState((currentState) => currentState + 1);
+setYourState(currentState => currentState + 1)
 ```
 
 The `setState` function accepts, in total, 3 parameters:
 
-- The state you want to set or a function to set it
-- The mutation behavior of this one `setState` call (optional)
-- The `ignoreAction` boolean (optional)
+-   The state you want to set or a function to set it
+-   The mutation behavior of this one `setState` call (optional)
+-   The `ignoreAction` boolean (optional)
 
 The mutation behavior is described below. Normally, the mutation behavior is a global value, but you can alter it within individual state updates if you want.
 
@@ -115,9 +115,9 @@ The `ignoreAction` boolean indicates whether or not to update the `past` and `fu
 If you want to use the global mutation behavior and set the `ignoreAction` bool, set mutation behavior to `null`:
 
 ```js
-const [yourState, setYourState, { undo, redo }] = useUndoable();
+const [yourState, setYourState, { undo, redo }] = useUndoable()
 
-setYourState(yourState + 1, null, true);
+setYourState(yourState + 1, null, true)
 ```
 
 Heads up: Are you pulling data from an API? Stick around to read how to handle that properly with useUndoable.
@@ -164,11 +164,15 @@ The `options` object looks like this:
 
 ```ts
 interface Options {
-    behavior?: 'mergePastReversed' | 'mergePast' | 'destroyFuture' | 'keepFuture';
-    historyLimit?: number | 'infinium' | 'infinity';
-    ignoreIdenticalMutations?: boolean;
-    cloneState?: boolean;
-};
+  behavior?:
+    | "mergePastReversed"
+    | "mergePast"
+    | "destroyFuture"
+    | "keepFuture"
+  historyLimit?: number | "infinium" | "infinity"
+  ignoreIdenticalMutations?: boolean
+  cloneState?: boolean
+}
 ```
 
 The `historyLimit` is a number that limits the amount of items in the `past` array. This is particularly useful when your state is relatively large.
@@ -185,7 +189,7 @@ If you do end up using this option, you have access to the `cloneState` option (
 
 #### Behavior
 
-You can customize the behavior of undo/redo actions by specifying one of the following: `mergePastReversed`, `mergePast`, `destroyFuture`,  or `keepFuture`
+You can customize the behavior of undo/redo actions by specifying one of the following: `mergePastReversed`, `mergePast`, `destroyFuture`, or `keepFuture`
 
 To describe these, let's go through an example.
 
@@ -219,7 +223,7 @@ Let us now call `undo()` twice. We are left with:
 }
 ```
 
-Great. This is the starting point for the behavior. 
+Great. This is the starting point for the behavior.
 
 Calling `undo()` essentially creates a new branch of state changes. The `behavior` specifies how to recover from _after_ a state change that followed an `undo()`.
 
@@ -257,7 +261,6 @@ What they do is simply merge the `future` into the `past`, meaning that every si
 
 The other option is the `keepFuture` option, which simply does not touch the `future` array.
 
-
 Therefore, contrary to the `destroyFuture` option, the resulting object would look like:
 
 ```js
@@ -274,21 +277,21 @@ The hook exports a few other values that are useful in certain scenarios. Let's 
 
 ```js
 const [
-    state,
-    setState,
+  state,
+  setState,
 
-    {
-        past,
-        future,
+  {
+    past,
+    future,
 
-        undo,
-        canUndo,
-        redo,
-        canRedo,
-        reset,
-        static_setState,
-    },
-] = useUndoable(initialState, options);
+    undo,
+    canUndo,
+    redo,
+    canRedo,
+    reset,
+    static_setState,
+  },
+] = useUndoable(initialState, options)
 ```
 
 `canUndo` and `canRedo` are just booleans indicating whether or not you can technically undo or redo any state changes.
@@ -389,27 +392,27 @@ Since the third value returned from the `useUndoable` hook is an object, you can
 
 ```js
 const [
-    count,
-    setCount,
-    {
-        past: currentPast,
-        future: currentFuture,
+  count,
+  setCount,
+  {
+    past: currentPast,
+    future: currentFuture,
 
-        undo: undoWithCustomName,
-        canUndo: canUndoWithCustomName,
-        redo: redoWithCustomName,
-        canRedo: canRedoWithCustomName,
-        reset: deleteItAll,
-    },
+    undo: undoWithCustomName,
+    canUndo: canUndoWithCustomName,
+    redo: redoWithCustomName,
+    canRedo: canRedoWithCustomName,
+    reset: deleteItAll,
+  },
 ] = useUndoable([
-    {
-        count: 1,
-    },
-]);
+  {
+    count: 1,
+  },
+])
 
 deleteItAll({
-    state: 'My new state',
-});
+  state: "My new state",
+})
 ```
 
 And, of course, you can set `count, setCount` to anything you want by default, since they are array items.
@@ -430,8 +433,8 @@ The `react-flow-example` does do something "unexpected:" moving a node counts as
 
 For instance:
 
-- You have Node A with position 0, 0
-- You move Node A to position 100, 100
+-   You have Node A with position 0, 0
+-   You move Node A to position 100, 100
 
 This is not one state update in React Flow v10. Instead, a `drag` event is fired for, more or less, every unit you move: 0 -> 1 -> 2 -> 3 -> and so on.
 
