@@ -1,6 +1,6 @@
 {
   "name": "use-undoable",
-  "version": "3.3.12",
+  "version": "4.0.0",
   "description": "React hook for undo/redo functionality without the hassle.",
   "private": false,
   "author": "Tristan Brewster <tristan@infi.im>",
