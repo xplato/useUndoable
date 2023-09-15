@@ -42,7 +42,7 @@ const mutate = (state: State, action: Action) => {
 		ignoreAction,
 	} = action
 
-	if (!payload) {
+	if (!payload && payload !== '' && payload !== 0) {
 		// A mutation call requires a payload.
 		// I guess we _could_ simply set the state
 		// to `undefined` with an empty payload,
