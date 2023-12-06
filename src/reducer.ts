@@ -1,7 +1,7 @@
-import { mutate } from "./mutate"
-import { payloadError } from "./errors"
+import {mutate} from "./mutate"
+import {payloadError} from "./errors"
 
-import type { Action, State } from "./types"
+import type {Action, State} from "./types"
 
 export const reducer = (state: State, action: Action): State => {
 	const { past, present, future } = state
@@ -36,7 +36,16 @@ export const reducer = (state: State, action: Action): State => {
 		}
 	}
 
-	const update = () => mutate(state, action)
+	// Transform functional updater to raw value by applying it
+	const transform = (action: Action) => {
+		action.payload = typeof action.payload === "function"
+			? action.payload(present)
+			: action.payload
+
+		return action
+	}
+
+	const update = () => mutate(state, transform(action))
 
 	const reset = () => {
 		const { payload } = action

@@ -77,9 +77,7 @@ const useUndoable = <T = any>(
 			mutationBehavior: MutationBehavior = options.behavior,
 			ignoreAction: boolean = false
 		) => {
-			return typeof payload === "function"
-				? update(payload(state.present), mutationBehavior, ignoreAction)
-				: update(payload, mutationBehavior, ignoreAction)
+			return update(payload, mutationBehavior, ignoreAction)
 		},
 		[state]
 	)
