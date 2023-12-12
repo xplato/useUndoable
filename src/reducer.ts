@@ -1,7 +1,7 @@
-import {mutate} from "./mutate"
-import {payloadError} from "./errors"
+import { mutate } from "./mutate"
+import { payloadError } from "./errors"
 
-import type {Action, State} from "./types"
+import type { Action, State } from "./types"
 
 export const reducer = (state: State, action: Action): State => {
 	const { past, present, future } = state
