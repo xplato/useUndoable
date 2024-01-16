@@ -42,10 +42,7 @@ const mutate = <T>(state: State<T>, action: Action<T>): State<T> => {
 		ignoreAction,
 	} = action
 
-	if (
-		(!payload && payload !== "" && payload !== 0) ||
-		payload === undefined
-	) {
+	if (!payload && payload !== "" && payload !== 0) {
 		// A mutation call requires a payload.
 		// I guess we _could_ simply set the state
 		// to `undefined` with an empty payload,
