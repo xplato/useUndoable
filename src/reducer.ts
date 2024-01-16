@@ -61,7 +61,7 @@ export const reducer = <T>(state: State<T>, action: Action<T>): State<T> => {
 		const { payload } = action
 
 		if (!payload) {
-			payloadError("resetInitialState")
+			throw payloadError("resetInitialState")
 		}
 
 		// Duplicate the past for mutation

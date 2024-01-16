@@ -1,4 +1,4 @@
-import { payloadError, invalidBehavior } from "./errors"
+import { payloadError, invalidBehaviorError } from "./errors"
 
 import type { Action, State } from "./types"
 
@@ -112,7 +112,8 @@ const mutate = <T>(state: State<T>, action: Action<T>): State<T> => {
 		return behaviorMap.mergePastReversed
 	}
 
-	if (!behaviorMap.hasOwnProperty(behavior)) invalidBehavior(behavior)
+	if (!behaviorMap.hasOwnProperty(behavior))
+		throw invalidBehaviorError(behavior)
 	return behaviorMap[behavior]
 }
 
