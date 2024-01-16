@@ -13,9 +13,9 @@ export type MutationBehavior =
 	| "destroyFuture"
 	| "keepFuture"
 
-export interface Action {
+export interface Action<T> {
 	type: ActionType
-	payload?: any
+	payload?: T
 	behavior?: MutationBehavior
 	historyLimit?: HistoryLimit
 	ignoreIdenticalMutations?: boolean
@@ -23,10 +23,10 @@ export interface Action {
 	ignoreAction?: boolean
 }
 
-export interface State {
-	past: any[]
-	present: any
-	future: any[]
+export interface State<T> {
+	past: T[]
+	present: T
+	future: T[]
 }
 
 export interface Options {

@@ -1,4 +1,4 @@
-import { payloadError, invalidBehavior } from "./errors"
+import { payloadError, invalidBehaviorError } from "./errors"
 
 import type { Action, State } from "./types"
 
@@ -31,7 +31,7 @@ const ensureLimit = (limit: number | undefined, arr: any[]) => {
 	return n
 }
 
-const mutate = (state: State, action: Action) => {
+const mutate = <T>(state: State<T>, action: Action<T>): State<T> => {
 	const { past, present, future } = state
 	const {
 		payload,
@@ -42,7 +42,7 @@ const mutate = (state: State, action: Action) => {
 		ignoreAction,
 	} = action
 
-	if (!payload && payload !== '' && payload !== 0) {
+	if (!payload && payload !== "" && payload !== 0) {
 		// A mutation call requires a payload.
 		// I guess we _could_ simply set the state
 		// to `undefined` with an empty payload,
@@ -51,7 +51,7 @@ const mutate = (state: State, action: Action) => {
 		//
 		// If you want to set the state to `undefined`,
 		// pass that explicitly.
-		payloadError("mutate")
+		throw payloadError("mutate")
 	}
 
 	if (ignoreAction) {
@@ -109,7 +109,8 @@ const mutate = (state: State, action: Action) => {
 		return behaviorMap.mergePastReversed
 	}
 
-	if (!behaviorMap.hasOwnProperty(behavior)) invalidBehavior(behavior)
+	if (!behaviorMap.hasOwnProperty(behavior))
+		throw invalidBehaviorError(behavior)
 	return behaviorMap[behavior]
 }
 
