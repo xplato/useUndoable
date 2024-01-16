@@ -1,8 +1,14 @@
-import { useReducer, useCallback } from "react"
+import { useReducer, useCallback, Reducer } from "react"
 
 import { reducer } from "./reducer"
 
-import type { MutationBehavior, Options, UseUndoable } from "./types"
+import type {
+	Action,
+	MutationBehavior,
+	Options,
+	State,
+	UseUndoable,
+} from "./types"
 
 const initialState = {
 	past: [],
@@ -26,10 +32,13 @@ const useUndoable = <T = any>(
 	initialPresent: T,
 	options: Options = defaultOptions
 ): UseUndoable<T> => {
-	const [state, dispatch] = useReducer(reducer, {
-		...initialState,
-		present: initialPresent,
-	})
+	const [state, dispatch] = useReducer<Reducer<State<T>, Action<T>>>(
+		reducer,
+		{
+			...initialState,
+			present: initialPresent,
+		}
+	)
 
 	const canUndo = state.past.length !== 0
 	const canRedo = state.future.length !== 0
@@ -56,7 +65,11 @@ const useUndoable = <T = any>(
 	)
 
 	const update = useCallback(
-		(payload, mutationBehavior: MutationBehavior, ignoreAction: boolean) =>
+		(
+			payload: T,
+			mutationBehavior: MutationBehavior,
+			ignoreAction: boolean
+		) =>
 			dispatch({
 				type: "update",
 				payload,

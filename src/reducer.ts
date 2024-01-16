@@ -3,10 +3,10 @@ import { payloadError } from "./errors"
 
 import type { Action, State } from "./types"
 
-export const reducer = (state: State, action: Action): State => {
+export const reducer = <T>(state: State<T>, action: Action<T>): State<T> => {
 	const { past, present, future } = state
 
-	const undo = () => {
+	const undo = (): State<T> => {
 		if (past.length === 0) {
 			return state
 		}
@@ -21,7 +21,7 @@ export const reducer = (state: State, action: Action): State => {
 		}
 	}
 
-	const redo = () => {
+	const redo = (): State<T> => {
 		if (future.length === 0) {
 			return state
 		}
@@ -37,7 +37,7 @@ export const reducer = (state: State, action: Action): State => {
 	}
 
 	// Transform functional updater to raw value by applying it
-	const transform = (action: Action) => {
+	const transform = (action: Action<T>) => {
 		action.payload = typeof action.payload === "function"
 			? action.payload(present)
 			: action.payload
@@ -45,19 +45,19 @@ export const reducer = (state: State, action: Action): State => {
 		return action
 	}
 
-	const update = () => mutate(state, transform(action))
+	const update = (): State<T> => mutate(state, transform(action))
 
-	const reset = () => {
+	const reset = (): State<T> => {
 		const { payload } = action
 
 		return {
 			past: [],
-			present: payload,
+			present: payload || state.present,
 			future: [],
 		}
 	}
 
-	const resetInitialState = () => {
+	const resetInitialState = (): State<T> => {
 		const { payload } = action
 
 		if (!payload) {
